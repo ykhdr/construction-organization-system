@@ -1,2 +1,2 @@
 ALTER TABLE construction_worker
-    ADD COLUMN team_id integer NOT NULL REFERENCES construction_team (id) default 0
+    ADD COLUMN IF NOT EXISTS team_id integer NOT NULL REFERENCES construction_team (id) default 0
