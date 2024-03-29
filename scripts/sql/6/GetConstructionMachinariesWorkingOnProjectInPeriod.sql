@@ -1,4 +1,4 @@
-SELECT cm.name
+SELECT cm.name AS machinery_name
 FROM construction_project AS cp
          JOIN work_schedule AS ws ON cp.id = ws.project_id
          JOIN work_schedule_construction_machinery AS wscm ON ws.id = wscm.work_schedule_id
