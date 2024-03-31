@@ -1,7 +1,7 @@
 package database
 
 import (
-	"construction-organization-system/internal/log"
+	"construction-organization-system/internal/pkg/log"
 	"database/sql"
 	"errors"
 	"os"

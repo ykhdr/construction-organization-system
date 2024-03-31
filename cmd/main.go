@@ -1,9 +1,9 @@
 package main
 
 import (
-	"construction-organization-system/internal/config"
-	"construction-organization-system/internal/database"
-	"construction-organization-system/internal/log"
+	"construction-organization-system/internal/pkg/database"
+	"construction-organization-system/internal/pkg/log"
+	"construction-organization-system/pkg/config"
 )
 
 func main() {
@@ -14,16 +14,16 @@ func main() {
 	}
 
 	log.Logger.Infoln("Connect to database...")
-	db, err := database.NewDB(dbConfig)
+	newDB, err := database.NewDB(dbConfig)
 	if err != nil {
-		log.Logger.WithError(err).Errorln("Error on db connection")
+		log.Logger.WithError(err).Errorln("Error on database connection")
 		return
 	}
 
 	log.Logger.Infoln("Successful database connection")
 
 	log.Logger.Infoln("Migrate database...")
-	err = database.Migrate(db, "deploy/migrations")
+	err = database.Migrate(newDB, "db/migrations")
 	if err != nil {
 		log.Logger.WithError(err).Errorln("Error on migrating")
 		return

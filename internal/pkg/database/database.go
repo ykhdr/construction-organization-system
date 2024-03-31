@@ -1,7 +1,7 @@
 package database
 
 import (
-	"construction-organization-system/internal/config"
+	"construction-organization-system/pkg/config"
 	"database/sql"
 	_ "github.com/lib/pq"
 )
