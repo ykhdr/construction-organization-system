@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS work_schedule
 (
-    id                   integer PRIMARY KEY,
+    id                   serial PRIMARY KEY,
     construction_team_id integer NOT NULL REFERENCES construction_team (id),
     work_type_id         integer NOT NULL REFERENCES work_type (id),
     plan_start_date      date    NOT NULL CHECK ( plan_start_date >= to_date('01.01.1900', 'DD-MM-YYYY')),
