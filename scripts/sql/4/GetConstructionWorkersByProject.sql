@@ -1,4 +1,4 @@
-SELECT ct.id AS construction_team_id, cw.name AS construction_worker
+SELECT ct.name AS construction_team_name, cw.name AS construction_worker
 FROM construction_project AS cp
          JOIN work_schedule AS ws ON cp.id = ws.project_id
          JOIN construction_team AS ct ON ct.id = ws.construction_team_id
