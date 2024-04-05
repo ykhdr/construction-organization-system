@@ -7,10 +7,10 @@
 
 
 ```shell
-DB_HOST=<db host>
-DB_PORT=<db port>
-DB_USER=<db user>
-DB_PASSWORD=<db password>
-DB_NAME=<db name>
+DB_HOST=<database host>
+DB_PORT=<database port>
+DB_USER=<database user>
+DB_PASSWORD=<database password>
+DB_NAME=<database name>
 ```
 

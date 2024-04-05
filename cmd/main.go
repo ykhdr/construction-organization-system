@@ -1,9 +1,11 @@
 package main
 
 import (
-	"construction-organization-system/internal/pkg/database"
-	"construction-organization-system/internal/pkg/log"
+	"construction-organization-system/internal/api"
+	"construction-organization-system/internal/database"
+	"construction-organization-system/internal/log"
 	"construction-organization-system/pkg/config"
+	"database/sql"
 )
 
 func main() {
@@ -20,6 +22,13 @@ func main() {
 		return
 	}
 
+	defer func(newDB *sql.DB) {
+		err := newDB.Close()
+		if err != nil {
+			log.Logger.WithError(err).Errorln("Error on database close")
+		}
+	}(newDB)
+
 	log.Logger.Infoln("Successful database connection")
 
 	log.Logger.Infoln("Migrate database...")
@@ -30,4 +39,9 @@ func main() {
 	}
 
 	log.Logger.Infoln("Successful database migrate")
+
+	log.Logger.Infoln("Run server on port 8080")
+	server := api.NewServer(":8080", newDB)
+	server.InitializeRoutes()
+	server.Start()
 }
