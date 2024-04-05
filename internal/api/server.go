@@ -14,6 +14,7 @@ type Server struct {
 	listenAddr                     string
 	router                         *mux.Router
 	buildingOrganizationHandlers   *handlers.BuildingOrganizationHandlers
+	buildingSiteHandlers           *handlers.BuildingSiteHandlers
 	constructionContractHandlers   *handlers.ConstructionContractHandlers
 	constructionMachineryHandlers  *handlers.ConstructionMachineryHandlers
 	constructionManagementHandlers *handlers.ConstructionManagementHandlers
@@ -31,6 +32,7 @@ type Server struct {
 
 func NewServer(listenAddr string, db *sql.DB) *Server {
 	buildingOrganizationHandlers := handlers.NewBuildingOrganizationHandlers(service.NewBuildingOrganizationService(postgres.NewBuildingOrganizationRepository(db)))
+	buildingSiteHandlers := handlers.NewBuildingSiteHandlers(service.NewBuildingSiteService(postgres.NewBuildingSiteRepository(db)))
 	constructionContractHandlers := handlers.NewConstructionContractHandlers(service.NewConstructionContractService(postgres.NewConstructionContractRepository(db)))
 	constructionMachineryHandlers := handlers.NewConstructionMachineryHandlers(service.NewConstructionMachineryService(postgres.NewConstructionMachineryRepository(db)))
 	constructionManagementHandlers := handlers.NewConstructionManagementHandlers(service.NewConstructionManagementService(postgres.NewConstructionManagementRepository(db)))
@@ -48,6 +50,7 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 		listenAddr:                     listenAddr,
 		router:                         &mux.Router{},
 		buildingOrganizationHandlers:   buildingOrganizationHandlers,
+		buildingSiteHandlers:           buildingSiteHandlers,
 		constructionContractHandlers:   constructionContractHandlers,
 		constructionMachineryHandlers:  constructionMachineryHandlers,
 		constructionManagementHandlers: constructionManagementHandlers,
@@ -72,6 +75,12 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/building_organization", s.buildingOrganizationHandlers.Create).Methods("POST")
 	api.HandleFunc("/building_organization/{id:[0-9]+}", s.buildingOrganizationHandlers.Update).Methods("PUT")
 	api.HandleFunc("/building_organization/{id:[0-9]+}", s.buildingOrganizationHandlers.Delete).Methods("DELETE")
+
+	api.HandleFunc("/building_site", s.buildingSiteHandlers.GetList).Methods("GET")
+	api.HandleFunc("/building_site/{id:[0-9]+}", s.buildingSiteHandlers.Get).Methods("GET")
+	api.HandleFunc("/building_site", s.buildingSiteHandlers.Create).Methods("POST")
+	api.HandleFunc("/building_site/{id:[0-9]+}", s.buildingSiteHandlers.Update).Methods("PUT")
+	api.HandleFunc("/building_site/{id:[0-9]+}", s.buildingSiteHandlers.Delete).Methods("DELETE")
 
 	api.HandleFunc("/construction_contract", s.constructionContractHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_contract/{id:[0-9]+}", s.constructionContractHandlers.Get).Methods("GET")
