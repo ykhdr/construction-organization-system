@@ -5,5 +5,5 @@ FROM construction_management AS cm
          JOIN engineer_team AS et ON cp.id = et.project_id
          JOIN engineer_worker AS ew ON et.id = ew.team_id
          JOIN engineer_position AS ep ON ew.position_id = ep.id
-WHERE building_site_id = ?
-  AND building_site_id != 0
+WHERE cm.id = ?
+  AND cm.id != 0

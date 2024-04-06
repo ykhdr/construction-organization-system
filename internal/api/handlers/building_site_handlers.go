@@ -92,3 +92,25 @@ func (h *BuildingSiteHandlers) GetManager(w http.ResponseWriter, r *http.Request
 	}
 
 }
+
+func (h *BuildingSiteHandlers) GetEngineers(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	siteId, err := strconv.Atoi(vars["site-id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	engineers, err := h.buildingSiteService.GetEngineers(siteId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(engineers)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}

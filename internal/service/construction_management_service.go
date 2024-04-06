@@ -9,10 +9,11 @@ import (
 
 type ConstructionManagementService struct {
 	constructionManagementRepository repository.ConstructionManagementRepository
+	engineerWorkerRepository         repository.EngineerWorkerRepository
 }
 
-func NewConstructionManagementService(repo repository.ConstructionManagementRepository) *ConstructionManagementService {
-	return &ConstructionManagementService{constructionManagementRepository: repo}
+func NewConstructionManagementService(constructionManagementRepo repository.ConstructionManagementRepository, engineerWorkerRepo repository.EngineerWorkerRepository) *ConstructionManagementService {
+	return &ConstructionManagementService{constructionManagementRepository: constructionManagementRepo, engineerWorkerRepository: engineerWorkerRepo}
 }
 
 func (s *ConstructionManagementService) GetById(id int) (*model.ConstructionManagement, error) {
@@ -37,4 +38,16 @@ func (s *ConstructionManagementService) GetList() ([]*model.ConstructionManageme
 	}
 
 	return managements, nil
+}
+
+func (s *ConstructionManagementService) GetEngineers(id int) ([]*model.EngineerWorker, error) {
+	ctx := context.Background()
+
+	engineers, err := s.engineerWorkerRepository.FindByConstructionManagement(ctx, id)
+	if err != nil {
+		log.Logger.WithError(err).Errorln("Error on getting engineers by building site id")
+		return nil, err
+	}
+
+	return engineers, nil
 }

@@ -8,11 +8,12 @@ import (
 )
 
 type BuildingSiteService struct {
-	buildingSiteRepository repository.BuildingSiteRepository
+	buildingSiteRepository   repository.BuildingSiteRepository
+	engineerWorkerRepository repository.EngineerWorkerRepository
 }
 
-func NewBuildingSiteService(repo repository.BuildingSiteRepository) *BuildingSiteService {
-	return &BuildingSiteService{buildingSiteRepository: repo}
+func NewBuildingSiteService(buildingSiteRepository repository.BuildingSiteRepository, engineerWorkerRepo repository.EngineerWorkerRepository) *BuildingSiteService {
+	return &BuildingSiteService{buildingSiteRepository: buildingSiteRepository, engineerWorkerRepository: engineerWorkerRepo}
 }
 
 func (s *BuildingSiteService) GetById(id int) (*model.BuildingSite, error) {
@@ -36,4 +37,16 @@ func (s *BuildingSiteService) GetList() ([]*model.BuildingSite, error) {
 	}
 
 	return buildingSites, nil
+}
+
+func (s *BuildingSiteService) GetEngineers(id int) ([]*model.EngineerWorker, error) {
+	ctx := context.Background()
+
+	engineers, err := s.engineerWorkerRepository.FindByBuildingSite(ctx, id)
+	if err != nil {
+		log.Logger.WithError(err).Errorln("Error on getting engineers by building site id")
+		return nil, err
+	}
+
+	return engineers, nil
 }

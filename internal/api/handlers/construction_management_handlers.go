@@ -94,3 +94,24 @@ func (h *ConstructionManagementHandlers) GetManager(w http.ResponseWriter, r *ht
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func (h *ConstructionManagementHandlers) GetEngineers(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	managementId, err := strconv.Atoi(vars["management-id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	engineers, err := h.constructionManagementService.GetEngineers(managementId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(engineers)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
