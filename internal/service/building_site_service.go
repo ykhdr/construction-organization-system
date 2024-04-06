@@ -25,3 +25,15 @@ func (s *BuildingSiteService) GetById(id int) (*model.BuildingSite, error) {
 
 	return buildingSite, nil
 }
+
+func (s *BuildingSiteService) GetList() ([]*model.BuildingSite, error) {
+	ctx := context.Background()
+
+	buildingSites, err := s.buildingSiteRepository.FindAll(ctx)
+	if err != nil {
+		log.Logger.WithError(err).Errorln("Error on getting building site list")
+		return nil, err
+	}
+
+	return buildingSites, nil
+}

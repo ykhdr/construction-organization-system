@@ -26,3 +26,15 @@ func (s *ConstructionManagementService) GetById(id int) (*model.ConstructionMana
 
 	return management, nil
 }
+
+func (s *ConstructionManagementService) GetList() ([]*model.ConstructionManagement, error) {
+	ctx := context.Background()
+
+	managements, err := s.constructionManagementRepository.FindAll(ctx)
+	if err != nil {
+		log.Logger.WithError(err).Errorln("Error on getting construction management list")
+		return nil, err
+	}
+
+	return managements, nil
+}

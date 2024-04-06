@@ -10,15 +10,19 @@ import (
 
 type ConstructionManagementHandlers struct {
 	constructionManagementService *service.ConstructionManagementService
+	engineerWorkerService         *service.EngineerWorkerService
 }
 
-func NewConstructionManagementHandlers(service *service.ConstructionManagementService) *ConstructionManagementHandlers {
-	return &ConstructionManagementHandlers{constructionManagementService: service}
+func NewConstructionManagementHandlers(managementService *service.ConstructionManagementService, engineerWorkerService *service.EngineerWorkerService) *ConstructionManagementHandlers {
+	return &ConstructionManagementHandlers{
+		constructionManagementService: managementService,
+		engineerWorkerService:         engineerWorkerService,
+	}
 }
 
 func (h *ConstructionManagementHandlers) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
+	id, err := strconv.Atoi(vars["management-id"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -49,5 +53,44 @@ func (h *ConstructionManagementHandlers) Delete(w http.ResponseWriter, r *http.R
 }
 
 func (h *ConstructionManagementHandlers) GetList(w http.ResponseWriter, r *http.Request) {
+	managements, err := h.constructionManagementService.GetList()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(managements)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+}
+
+func (h *ConstructionManagementHandlers) GetManager(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	managementId, err := strconv.Atoi(vars["management-id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	management, err := h.constructionManagementService.GetById(managementId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	worker, err := h.engineerWorkerService.GetById(management.ManagerID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(worker)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }

@@ -31,20 +31,37 @@ type Server struct {
 }
 
 func NewServer(listenAddr string, db *sql.DB) *Server {
-	buildingOrganizationHandlers := handlers.NewBuildingOrganizationHandlers(service.NewBuildingOrganizationService(postgres.NewBuildingOrganizationRepository(db)))
-	buildingSiteHandlers := handlers.NewBuildingSiteHandlers(service.NewBuildingSiteService(postgres.NewBuildingSiteRepository(db)))
-	constructionContractHandlers := handlers.NewConstructionContractHandlers(service.NewConstructionContractService(postgres.NewConstructionContractRepository(db)))
-	constructionMachineryHandlers := handlers.NewConstructionMachineryHandlers(service.NewConstructionMachineryService(postgres.NewConstructionMachineryRepository(db)))
-	constructionManagementHandlers := handlers.NewConstructionManagementHandlers(service.NewConstructionManagementService(postgres.NewConstructionManagementRepository(db)))
-	constructionProjectHandlers := handlers.NewConstructionProjectHandlers(service.NewConstructionProjectService(postgres.NewConstructionProjectRepository(db)))
-	constructionTeamHandlers := handlers.NewConstructionTeamHandlers(service.NewConstructionTeamService(postgres.NewConstructionTeamRepository(db)))
-	constructionWorkerHandlers := handlers.NewConstructionWorkerHandlers(service.NewConstructionWorkerService(postgres.NewConstructionWorkerRepository(db)))
-	employeeHandlers := handlers.NewEmployeeHandlers(service.NewEmployeeService(postgres.NewEmployeeRepository(db)))
-	engineerTeamHandlers := handlers.NewEngineerTeamHandlers(service.NewEngineerTeamService(postgres.NewEngineerTeamRepository(db)))
-	engineerWorkerHandlers := handlers.NewEngineerWorkerHandlers(service.NewEngineerWorkerService(postgres.NewEngineerWorkerRepository(db)))
-	estimateHandlers := handlers.NewEstimateHandlers(service.NewEstimateService(postgres.NewEstimateRepository(db)))
-	reportHandlers := handlers.NewReportHandlers(service.NewReportService(postgres.NewReportRepository(db)))
-	workScheduleHandlers := handlers.NewWorkScheduleHandlers(service.NewWorkScheduleService(postgres.NewWorkScheduleRepository(db)))
+	buildingOrganizationService := service.NewBuildingOrganizationService(postgres.NewBuildingOrganizationRepository(db))
+	buildingSiteService := service.NewBuildingSiteService(postgres.NewBuildingSiteRepository(db))
+	constructionContractService := service.NewConstructionContractService(postgres.NewConstructionContractRepository(db))
+	constructionMachineryService := service.NewConstructionMachineryService(postgres.NewConstructionMachineryRepository(db))
+	constructionManagementService := service.NewConstructionManagementService(postgres.NewConstructionManagementRepository(db))
+	constructionProjectService := service.NewConstructionProjectService(postgres.NewConstructionProjectRepository(db))
+	constructionTeamService := service.NewConstructionTeamService(postgres.NewConstructionTeamRepository(db))
+	constructionWorkerService := service.NewConstructionWorkerService(postgres.NewConstructionWorkerRepository(db))
+	customerOrganizationService := service.NewCustomerOrganizationService(postgres.NewCustomerOrganizationRepository(db))
+	employeeService := service.NewEmployeeService(postgres.NewEmployeeRepository(db))
+	engineerTeamService := service.NewEngineerTeamService(postgres.NewEngineerTeamRepository(db))
+	engineerWorkerService := service.NewEngineerWorkerService(postgres.NewEngineerWorkerRepository(db))
+	estimateService := service.NewEstimateService(postgres.NewEstimateRepository(db))
+	reportService := service.NewReportService(postgres.NewReportRepository(db))
+	workScheduleService := service.NewWorkScheduleService(postgres.NewWorkScheduleRepository(db))
+
+	buildingOrganizationHandlers := handlers.NewBuildingOrganizationHandlers(buildingOrganizationService)
+	buildingSiteHandlers := handlers.NewBuildingSiteHandlers(buildingSiteService, engineerWorkerService)
+	constructionContractHandlers := handlers.NewConstructionContractHandlers(constructionContractService)
+	constructionMachineryHandlers := handlers.NewConstructionMachineryHandlers(constructionMachineryService)
+	constructionManagementHandlers := handlers.NewConstructionManagementHandlers(constructionManagementService, engineerWorkerService)
+	constructionProjectHandlers := handlers.NewConstructionProjectHandlers(constructionProjectService)
+	constructionTeamHandlers := handlers.NewConstructionTeamHandlers(constructionTeamService)
+	constructionWorkerHandlers := handlers.NewConstructionWorkerHandlers(constructionWorkerService)
+	customerOrganizationHandlers := handlers.NewCustomerOrganizationHandlers(customerOrganizationService)
+	employeeHandlers := handlers.NewEmployeeHandlers(employeeService)
+	engineerTeamHandlers := handlers.NewEngineerTeamHandlers(engineerTeamService)
+	engineerWorkerHandlers := handlers.NewEngineerWorkerHandlers(engineerWorkerService)
+	estimateHandlers := handlers.NewEstimateHandlers(estimateService)
+	reportHandlers := handlers.NewReportHandlers(reportService)
+	workScheduleHandlers := handlers.NewWorkScheduleHandlers(workScheduleService)
 
 	return &Server{
 		listenAddr:                     listenAddr,
@@ -57,6 +74,7 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 		constructionProjectHandlers:    constructionProjectHandlers,
 		constructionTeamHandlers:       constructionTeamHandlers,
 		constructionWorkerHandlers:     constructionWorkerHandlers,
+		customerOrganizationHandlers:   customerOrganizationHandlers,
 		employeeHandlers:               employeeHandlers,
 		engineerTeamHandlers:           engineerTeamHandlers,
 		engineerWorkerHandlers:         engineerWorkerHandlers,
@@ -77,10 +95,11 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/building_organization/{id:[0-9]+}", s.buildingOrganizationHandlers.Delete).Methods("DELETE")
 
 	api.HandleFunc("/building_site", s.buildingSiteHandlers.GetList).Methods("GET")
-	api.HandleFunc("/building_site/{id:[0-9]+}", s.buildingSiteHandlers.Get).Methods("GET")
+	api.HandleFunc("/building_site/{site-id:[0-9]+}", s.buildingSiteHandlers.Get).Methods("GET")
 	api.HandleFunc("/building_site", s.buildingSiteHandlers.Create).Methods("POST")
-	api.HandleFunc("/building_site/{id:[0-9]+}", s.buildingSiteHandlers.Update).Methods("PUT")
-	api.HandleFunc("/building_site/{id:[0-9]+}", s.buildingSiteHandlers.Delete).Methods("DELETE")
+	api.HandleFunc("/building_site/{site-id:[0-9]+}", s.buildingSiteHandlers.Update).Methods("PUT")
+	api.HandleFunc("/building_site/{site-id:[0-9]+}", s.buildingSiteHandlers.Delete).Methods("DELETE")
+	api.HandleFunc("/building_site/{site-id:[0-9]+}/manager", s.buildingSiteHandlers.GetManager).Methods("GET")
 
 	api.HandleFunc("/construction_contract", s.constructionContractHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_contract/{id:[0-9]+}", s.constructionContractHandlers.Get).Methods("GET")
@@ -95,10 +114,11 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/construction_machinery/{id:[0-9]+}", s.constructionMachineryHandlers.Delete).Methods("DELETE")
 
 	api.HandleFunc("/construction_management", s.constructionManagementHandlers.GetList).Methods("GET")
-	api.HandleFunc("/construction_management/{id:[0-9]+}", s.constructionManagementHandlers.Get).Methods("GET")
+	api.HandleFunc("/construction_management/{management-id:[0-9]+}", s.constructionManagementHandlers.Get).Methods("GET")
 	api.HandleFunc("/construction_management", s.constructionManagementHandlers.Create).Methods("POST")
-	api.HandleFunc("/construction_management/{id:[0-9]+}", s.constructionManagementHandlers.Update).Methods("PUT")
-	api.HandleFunc("/construction_management/{id:[0-9]+}", s.constructionManagementHandlers.Delete).Methods("DELETE")
+	api.HandleFunc("/construction_management/{management-id:[0-9]+}", s.constructionManagementHandlers.Update).Methods("PUT")
+	api.HandleFunc("/construction_management/{management-id:[0-9]+}", s.constructionManagementHandlers.Delete).Methods("DELETE")
+	api.HandleFunc("/construction_management/{management-id:[0-9]+}/manager", s.constructionManagementHandlers.GetManager).Methods("GET")
 
 	api.HandleFunc("/construction_project", s.constructionProjectHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}", s.constructionProjectHandlers.Get).Methods("GET")

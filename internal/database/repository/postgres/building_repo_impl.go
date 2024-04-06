@@ -51,3 +51,20 @@ func (repo *buildingSiteRepository) Delete(ctx context.Context, id int) error {
 	}
 	return nil
 }
+
+func (repo *buildingSiteRepository) FindAll(ctx context.Context) ([]*model.BuildingSite, error) {
+	var buildingSites []*model.BuildingSite
+	rows, err := repo.db.QueryContext(ctx, "SELECT id, address, management_id, manager_id FROM building_site WHERE id != 0")
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var entity model.BuildingSite
+		err = rows.Scan(&entity.ID, &entity.Address, &entity.ManagementID, &entity.ManagerID)
+		if err != nil {
+			return nil, err
+		}
+		buildingSites = append(buildingSites, &entity)
+	}
+	return buildingSites, nil
+}
