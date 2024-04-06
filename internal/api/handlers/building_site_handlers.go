@@ -19,7 +19,7 @@ func NewBuildingSiteHandlers(buildingSiteService *service.BuildingSiteService, e
 
 func (h *BuildingSiteHandlers) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["site-id"])
+	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -67,7 +67,7 @@ func (h *BuildingSiteHandlers) GetList(w http.ResponseWriter, r *http.Request) {
 func (h *BuildingSiteHandlers) GetManager(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	siteId, err := strconv.Atoi(vars["site-id"])
+	siteId, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -96,7 +96,7 @@ func (h *BuildingSiteHandlers) GetManager(w http.ResponseWriter, r *http.Request
 func (h *BuildingSiteHandlers) GetEngineers(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	siteId, err := strconv.Atoi(vars["site-id"])
+	siteId, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -110,6 +110,28 @@ func (h *BuildingSiteHandlers) GetEngineers(w http.ResponseWriter, r *http.Reque
 
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(engineers)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h *BuildingSiteHandlers) GetProjects(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	siteId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	projects, err := h.buildingSiteService.GetProjects(siteId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(projects)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

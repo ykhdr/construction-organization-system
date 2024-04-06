@@ -10,6 +10,7 @@ import (
 type ConstructionManagementService struct {
 	constructionManagementRepository repository.ConstructionManagementRepository
 	engineerWorkerRepository         repository.EngineerWorkerRepository
+	projectRepository                repository.ConstructionProjectRepository
 }
 
 func NewConstructionManagementService(constructionManagementRepo repository.ConstructionManagementRepository, engineerWorkerRepo repository.EngineerWorkerRepository) *ConstructionManagementService {
@@ -17,9 +18,7 @@ func NewConstructionManagementService(constructionManagementRepo repository.Cons
 }
 
 func (s *ConstructionManagementService) GetById(id int) (*model.ConstructionManagement, error) {
-	ctx := context.Background()
-
-	management, err := s.constructionManagementRepository.Find(ctx, id)
+	management, err := s.constructionManagementRepository.Find(context.Background(), id)
 	if err != nil {
 		log.Logger.WithError(err).Errorln("Error on getting construction management by id")
 		return nil, err
@@ -29,9 +28,7 @@ func (s *ConstructionManagementService) GetById(id int) (*model.ConstructionMana
 }
 
 func (s *ConstructionManagementService) GetList() ([]*model.ConstructionManagement, error) {
-	ctx := context.Background()
-
-	managements, err := s.constructionManagementRepository.FindAll(ctx)
+	managements, err := s.constructionManagementRepository.FindAll(context.Background())
 	if err != nil {
 		log.Logger.WithError(err).Errorln("Error on getting construction management list")
 		return nil, err
@@ -41,13 +38,21 @@ func (s *ConstructionManagementService) GetList() ([]*model.ConstructionManageme
 }
 
 func (s *ConstructionManagementService) GetEngineers(id int) ([]*model.EngineerWorker, error) {
-	ctx := context.Background()
-
-	engineers, err := s.engineerWorkerRepository.FindByConstructionManagement(ctx, id)
+	engineers, err := s.engineerWorkerRepository.FindByConstructionManagement(context.Background(), id)
 	if err != nil {
 		log.Logger.WithError(err).Errorln("Error on getting engineers by building site id")
 		return nil, err
 	}
 
 	return engineers, nil
+}
+
+func (s *ConstructionManagementService) GetProjects(id int) ([]*model.ConstructionProject, error) {
+	projects, err := s.projectRepository.FindByConstructionManagement(context.Background(), id)
+	if err != nil {
+		log.Logger.WithError(err).Errorln("Error on getting projects by building site id")
+		return nil, err
+	}
+
+	return projects, nil
 }

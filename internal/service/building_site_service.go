@@ -10,6 +10,7 @@ import (
 type BuildingSiteService struct {
 	buildingSiteRepository   repository.BuildingSiteRepository
 	engineerWorkerRepository repository.EngineerWorkerRepository
+	projectRepository        repository.ConstructionProjectRepository
 }
 
 func NewBuildingSiteService(buildingSiteRepository repository.BuildingSiteRepository, engineerWorkerRepo repository.EngineerWorkerRepository) *BuildingSiteService {
@@ -17,8 +18,7 @@ func NewBuildingSiteService(buildingSiteRepository repository.BuildingSiteReposi
 }
 
 func (s *BuildingSiteService) GetById(id int) (*model.BuildingSite, error) {
-	ctx := context.Background()
-	buildingSite, err := s.buildingSiteRepository.Find(ctx, id)
+	buildingSite, err := s.buildingSiteRepository.Find(context.Background(), id)
 	if err != nil {
 		log.Logger.WithError(err).Errorln("Error on getting building site by id")
 		return nil, err
@@ -28,9 +28,7 @@ func (s *BuildingSiteService) GetById(id int) (*model.BuildingSite, error) {
 }
 
 func (s *BuildingSiteService) GetList() ([]*model.BuildingSite, error) {
-	ctx := context.Background()
-
-	buildingSites, err := s.buildingSiteRepository.FindAll(ctx)
+	buildingSites, err := s.buildingSiteRepository.FindAll(context.Background())
 	if err != nil {
 		log.Logger.WithError(err).Errorln("Error on getting building site list")
 		return nil, err
@@ -40,13 +38,21 @@ func (s *BuildingSiteService) GetList() ([]*model.BuildingSite, error) {
 }
 
 func (s *BuildingSiteService) GetEngineers(id int) ([]*model.EngineerWorker, error) {
-	ctx := context.Background()
-
-	engineers, err := s.engineerWorkerRepository.FindByBuildingSite(ctx, id)
+	engineers, err := s.engineerWorkerRepository.FindByBuildingSite(context.Background(), id)
 	if err != nil {
 		log.Logger.WithError(err).Errorln("Error on getting engineers by building site id")
 		return nil, err
 	}
 
 	return engineers, nil
+}
+
+func (s *BuildingSiteService) GetProjects(id int) ([]*model.ConstructionProject, error) {
+	projects, err := s.projectRepository.FindByBuildingSite(context.Background(), id)
+	if err != nil {
+		log.Logger.WithError(err).Errorln("Error on getting projects by building site id")
+		return nil, err
+	}
+
+	return projects, nil
 }

@@ -51,3 +51,64 @@ func (repo *constructionProjectRepository) Delete(ctx context.Context, id int) e
 	}
 	return nil
 }
+
+func (repo *constructionProjectRepository) FindByConstructionManagement(ctx context.Context, managementID int) ([]*model.ConstructionProject, error) {
+	var projects []*model.ConstructionProject
+
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT cp.id, cp.name, cp.building_site_id 
+	FROM construction_management AS cm
+        JOIN building_site AS bs ON cm.id = bs.management_id
+        JOIN construction_project AS cp ON bs.id = cp.building_site_id
+	WHERE cm.id = $1
+	AND cm.id != 0
+		
+	`, managementID)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var entity model.ConstructionProject
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+			return nil, err
+		}
+		projects = append(projects, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return projects, nil
+}
+
+func (repo *constructionProjectRepository) FindByBuildingSite(ctx context.Context, siteID int) ([]*model.ConstructionProject, error) {
+	var projects []*model.ConstructionProject
+
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT cp.id, cp.name, cp.building_site_id 
+    FROM building_site AS bs 
+        JOIN construction_project AS cp ON bs.id = cp.building_site_id
+	WHERE bs.id = $1
+	AND bs.id != 0
+		
+	`, siteID)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var entity model.ConstructionProject
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+			return nil, err
+		}
+		projects = append(projects, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return projects, nil
+}

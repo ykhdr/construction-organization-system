@@ -5,7 +5,7 @@ import "time"
 type WorkSchedule struct {
 	ID                 int       `db:"id" json:"id"`
 	ConstructionTeamID int       `db:"construction_team_id" json:"construction_team_id"`
-	WorkTypeID         int       `db:"work_type_id" json:"work_type_id"`
+	WorkType           WorkType  `json:"work_type_id"`
 	PlanStartDate      time.Time `db:"plan_start_date" json:"plan_start_date"`
 	PlanEndDate        time.Time `db:"plan_end_date" json:"plan_end_date"`
 	FactStartDate      time.Time `db:"fact_start_date" json:"fact_start_date"`
