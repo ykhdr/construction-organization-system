@@ -57,3 +57,25 @@ func (h *ConstructionProjectHandlers) GetWorkSchedules(w http.ResponseWriter, r 
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func (h *ConstructionProjectHandlers) GetConstructionTeams(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	constructionTeams, err := h.constructionProjectService.GetConstructionTeams(projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(constructionTeams)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
