@@ -52,3 +52,33 @@ func (repo *constructionWorkerRepository) Delete(ctx context.Context, id int) er
 	}
 	return nil
 }
+
+func (repo *constructionWorkerRepository) FindByTeam(ctx context.Context, teamId int) ([]*model.ConstructionWorker, error) {
+	query := `
+	SELECT id, name, surname, patronymic, age, seniority, building_organization_id, is_shift_worker, team_id
+	FROM construction_worker
+	WHERE team_id = $1
+	`
+
+	rows, err := repo.db.QueryContext(ctx, query, teamId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var entities []*model.ConstructionWorker
+	for rows.Next() {
+		var entity model.ConstructionWorker
+		err := rows.Scan(&entity.ID, &entity.Name, &entity.Surname, &entity.Patronymic, &entity.Age, &entity.Seniority, &entity.BuildingOrganizationID, &entity.IsShiftWorker, &entity.TeamID)
+		if err != nil {
+			return nil, err
+		}
+		entities = append(entities, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return entities, nil
+}

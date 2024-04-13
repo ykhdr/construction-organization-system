@@ -153,6 +153,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/construction_team", s.constructionTeamHandlers.Create).Methods("POST")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Update).Methods("PUT")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Delete).Methods("DELETE")
+	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.GetWorkers).Methods("GET")
 
 	api.HandleFunc("/construction_worker", s.constructionWorkerHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_worker/{id:[0-9]+}", s.constructionWorkerHandlers.Get).Methods("GET")

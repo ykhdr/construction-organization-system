@@ -78,5 +78,10 @@ func (repo *constructionTeamRepository) FindByProject(ctx context.Context, proje
 		}
 		teams = append(teams, &entity)
 	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return teams, nil
 }
