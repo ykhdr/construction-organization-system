@@ -11,4 +11,6 @@ type ConstructionMachineryRepository interface {
 	Update(ctx context.Context, entity model.ConstructionMachinery) error
 	Delete(ctx context.Context, id int) error
 	GetByManagement(ctx context.Context, managementId int) ([]*model.ConstructionMachinery, error)
+	GetByProject(ctx context.Context, projectID int) ([]*model.ConstructionMachinery, error)
+	GetByProjectWithPeriod(ctx context.Context, projectID int, startDate string, endDate string) ([]*model.ConstructionMachinery, error)
 }

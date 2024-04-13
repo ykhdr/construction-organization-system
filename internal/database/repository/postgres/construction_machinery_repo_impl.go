@@ -85,3 +85,73 @@ func (repo *constructionMachineryRepository) GetByManagement(ctx context.Context
 
 	return result, nil
 }
+
+func (repo *constructionMachineryRepository) GetByProject(ctx context.Context, projectID int) ([]*model.ConstructionMachinery, error) {
+	query := `
+	SELECT cm.id, cm.name, cm.project_id
+	FROM construction_project AS cp 
+		JOIN construction_machinery AS cm ON cp.id = cm.project_id
+	WHERE cp.id = $1
+		AND cp.id != 0
+	`
+
+	rows, err := repo.db.QueryContext(ctx, query, projectID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var result []*model.ConstructionMachinery
+	for rows.Next() {
+		var entity model.ConstructionMachinery
+		err = rows.Scan(&entity.ID, &entity.Name, &entity.ProjectID)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (repo *constructionMachineryRepository) GetByProjectWithPeriod(ctx context.Context, projectID int, startDate, endDate string) ([]*model.ConstructionMachinery, error) {
+	query := `
+	SELECT cm.id, cm.name, cm.project_id
+	FROM construction_project AS cp 
+		JOIN work_schedule AS ws ON cp.id = ws.project_id
+        JOIN construction_machinery_usage AS cmu ON ws.id = cmu.work_schedule_id
+        JOIN construction_machinery AS cm ON cp.id = cm.project_id
+	WHERE cp.id = $1
+		AND cp.id != 0
+		AND ($2 = '' OR ws.fact_start_date >= $2)
+		AND ($3 = '' OR ws.fact_end_date <= $3)
+	`
+
+	rows, err := repo.db.QueryContext(ctx, query, projectID, startDate, endDate)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var result []*model.ConstructionMachinery
+	for rows.Next() {
+		var entity model.ConstructionMachinery
+		err = rows.Scan(&entity.ID, &entity.Name, &entity.ProjectID)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}

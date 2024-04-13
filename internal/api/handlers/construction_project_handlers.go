@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type ConstructionProjectHandlers struct {
@@ -75,6 +76,41 @@ func (h *ConstructionProjectHandlers) GetConstructionTeams(w http.ResponseWriter
 
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(constructionTeams)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h *ConstructionProjectHandlers) GetMachines(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	startDate := r.URL.Query().Get("start_date")
+	endDate := r.URL.Query().Get("end_date")
+
+	if _, err := time.Parse("2006-01-02", startDate); startDate != "" && err != nil {
+		http.Error(w, "Invalid start date format. Use YYYY-MM-DD format.", http.StatusBadRequest)
+		return
+	}
+
+	if _, err := time.Parse("2006-01-02", endDate); endDate != "" && err != nil {
+		http.Error(w, "Invalid end date format. Use YYYY-MM-DD format.", http.StatusBadRequest)
+		return
+	}
+
+	machines, err := h.constructionProjectService.GetMachines(projectId, startDate, endDate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(machines)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
