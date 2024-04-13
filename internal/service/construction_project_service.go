@@ -11,6 +11,7 @@ type ConstructionProjectService struct {
 	workScheduleRepository          repository.WorkScheduleRepository
 	constructionTeamRepository      repository.ConstructionTeamRepository
 	constructionMachineryRepository repository.ConstructionMachineryRepository
+	estimateRepository              repository.EstimateRepository
 }
 
 func NewConstructionProjectService(constructionProjectRepo repository.ConstructionProjectRepository, workScheduleRepo repository.WorkScheduleRepository) *ConstructionProjectService {
@@ -49,4 +50,14 @@ func (s *ConstructionProjectService) GetMachines(projectID int, startDate, endDa
 	}
 
 	return machines, nil
+}
+
+func (s *ConstructionProjectService) GetEstimate(projectID int) (*model.Estimate, error) {
+	estimate, err := s.estimateRepository.Find(context.Background(), projectID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return estimate, nil
 }

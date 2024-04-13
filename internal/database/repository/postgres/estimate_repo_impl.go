@@ -26,9 +26,20 @@ func (repo *estimateRepository) Save(ctx context.Context, entity model.Estimate)
 }
 
 func (repo *estimateRepository) Find(ctx context.Context, id int) (*model.Estimate, error) {
+	query := `
+	SELECT e.id, m.name, m.cost, mu.plan_quantity, mu.fact_quantity, e.last_update_date
+	FROM construction_project AS cp
+         JOIN estimate AS e ON cp.id = e.id
+         JOIN material_usage AS mu ON e.id = mu.estimate_id
+         JOIN material AS m ON mu.material_id = m.id
+	WHERE cp.id = $1
+  		AND cp.id != 0
+	`
+
 	var entity model.Estimate
-	err := repo.db.QueryRowContext(ctx, "SELECT id, last_update_date FROM estimate WHERE id = $1", id).
-		Scan(&entity.ID, &entity.LastUpdateDate)
+	err := repo.db.QueryRowContext(ctx, query, id).
+		Scan(&entity.ID, &entity.MaterialUsage.Material.Name, &entity.MaterialUsage.Material.Cost, &entity.MaterialUsage.PlanQuantity, &entity.MaterialUsage.FactQuantity, &entity.LastUpdateDate)
+
 	if err != nil {
 		return nil, err
 	}
@@ -36,6 +47,7 @@ func (repo *estimateRepository) Find(ctx context.Context, id int) (*model.Estima
 }
 
 func (repo *estimateRepository) Update(ctx context.Context, entity model.Estimate) error {
+	// TODO прописать обновление MaterialUsage в том числе
 	_, err := repo.db.ExecContext(ctx, "UPDATE estimate SET last_update_date = $1 WHERE id = $2",
 		entity.LastUpdateDate, entity.ID)
 	if err != nil {
