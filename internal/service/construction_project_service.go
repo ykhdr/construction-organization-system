@@ -12,6 +12,7 @@ type ConstructionProjectService struct {
 	constructionTeamRepository      repository.ConstructionTeamRepository
 	constructionMachineryRepository repository.ConstructionMachineryRepository
 	estimateRepository              repository.EstimateRepository
+	reportRepository                repository.ReportRepository
 }
 
 func NewConstructionProjectService(constructionProjectRepo repository.ConstructionProjectRepository, workScheduleRepo repository.WorkScheduleRepository) *ConstructionProjectService {
@@ -60,4 +61,14 @@ func (s *ConstructionProjectService) GetEstimate(projectID int) (*model.Estimate
 	}
 
 	return estimate, nil
+}
+
+func (s *ConstructionProjectService) GetReports(projectId int) ([]*model.Report, error) {
+	reports, err := s.reportRepository.FindByProjectID(context.Background(), projectId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return reports, nil
 }

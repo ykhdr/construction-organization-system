@@ -10,4 +10,5 @@ type ReportRepository interface {
 	Find(ctx context.Context, id int) (*model.Report, error)
 	Update(ctx context.Context, entity model.Report) error
 	Delete(ctx context.Context, id int) error
+	FindByProjectID(ctx context.Context, projectId int) ([]*model.Report, error)
 }

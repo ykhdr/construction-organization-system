@@ -51,3 +51,21 @@ func (repo *reportRepository) Delete(ctx context.Context, id int) error {
 	}
 	return nil
 }
+
+func (repo *reportRepository) FindByProjectID(ctx context.Context, projectId int) ([]*model.Report, error) {
+	var entities []*model.Report
+	rows, err := repo.db.QueryContext(ctx, "SELECT id, project_id, report_creation_date, report_file FROM report WHERE project_id = $1", projectId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var entity model.Report
+		err := rows.Scan(&entity.ID, &entity.ProjectID, &entity.ReportCreationDate, &entity.ReportFile)
+		if err != nil {
+			return nil, err
+		}
+		entities = append(entities, &entity)
+	}
+	return entities, nil
+}

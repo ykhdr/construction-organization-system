@@ -137,3 +137,25 @@ func (h *ConstructionProjectHandlers) GetEstimate(w http.ResponseWriter, r *http
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func (h *ConstructionProjectHandlers) GetReports(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	reports, err := h.constructionProjectService.GetReports(projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(reports)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
