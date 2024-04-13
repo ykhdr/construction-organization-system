@@ -11,6 +11,7 @@ type ConstructionManagementService struct {
 	constructionManagementRepository repository.ConstructionManagementRepository
 	engineerWorkerRepository         repository.EngineerWorkerRepository
 	projectRepository                repository.ConstructionProjectRepository
+	constructionMachineryRepository  repository.ConstructionMachineryRepository
 }
 
 func NewConstructionManagementService(constructionManagementRepo repository.ConstructionManagementRepository, engineerWorkerRepo repository.EngineerWorkerRepository) *ConstructionManagementService {
@@ -55,4 +56,14 @@ func (s *ConstructionManagementService) GetProjects(id int) ([]*model.Constructi
 	}
 
 	return projects, nil
+}
+
+func (s *ConstructionManagementService) GetMachines(id int) ([]*model.ConstructionMachinery, error) {
+	machines, err := s.constructionMachineryRepository.GetByManagement(context.Background(), id)
+	if err != nil {
+		log.Logger.WithError(err).Errorln("Error on getting machines by building site id")
+		return nil, err
+	}
+
+	return machines, nil
 }

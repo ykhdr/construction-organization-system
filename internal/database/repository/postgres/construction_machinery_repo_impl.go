@@ -51,3 +51,37 @@ func (repo *constructionMachineryRepository) Delete(ctx context.Context, id int)
 	}
 	return nil
 }
+
+func (repo *constructionMachineryRepository) GetByManagement(ctx context.Context, managementId int) ([]*model.ConstructionMachinery, error) {
+	query := `
+	SELECT m.id, m.name, m.project_id
+	FROM construction_management AS cm
+         JOIN building_site AS bs ON cm.id = bs.management_id
+         JOIN construction_project AS cp ON bs.id = cp.building_site_id
+         JOIN construction_machinery AS m ON cp.id = m.project_id
+	WHERE cm.name = $1
+  		AND cm.id != 0
+	`
+
+	rows, err := repo.db.QueryContext(ctx, query, managementId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []*model.ConstructionMachinery
+	for rows.Next() {
+		var entity model.ConstructionMachinery
+		err = rows.Scan(&entity.ID, &entity.Name, &entity.ProjectID)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}

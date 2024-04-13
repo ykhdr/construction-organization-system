@@ -137,3 +137,25 @@ func (h *ConstructionManagementHandlers) GetProjects(w http.ResponseWriter, r *h
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func (h *ConstructionManagementHandlers) GetMachines(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	managementId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	machines, err := h.constructionManagementService.GetMachines(managementId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(machines)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
