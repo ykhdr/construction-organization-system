@@ -80,3 +80,37 @@ func (repo *workTypeRepository) FindByProjectWithExceededWorkDeadlines(ctx conte
 
 	return entities, nil
 }
+
+func (repo *workTypeRepository) FindByTeamWithPeriod(ctx context.Context, teamId int, startDate string, endDate string) ([]*model.WorkType, error) {
+	var entities []*model.WorkType
+
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT wt.id, wt.name
+	FROM work_schedule AS ws
+		JOIN work_type AS wt ON ws.work_type_id = wt.id
+	WHERE ws.id != 0
+		AND wt.id != 0 
+		AND ws.construction_team_id = $1
+		AND ($2 = '' OR ws.fact_start_date > $2)
+		AND ($3 = '' OR  ws.fact_end_date < $3)
+	`, teamId, startDate, endDate)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var entity model.WorkType
+		if err := rows.Scan(&entity.ID, &entity.Name); err != nil {
+			return nil, err
+		}
+		entities = append(entities, &entity)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return entities, nil
+}

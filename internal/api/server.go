@@ -160,6 +160,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Update).Methods("PUT")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Delete).Methods("DELETE")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.GetWorkers).Methods("GET")
+	api.HandleFunc("/construction_team/{id:[0-9]+}/work_types?start_date={start_date}&end_date={end_date}", s.constructionTeamHandlers.GetWorkTypes).Methods("GET")
 
 	api.HandleFunc("/construction_worker", s.constructionWorkerHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_worker/{id:[0-9]+}", s.constructionWorkerHandlers.Get).Methods("GET")
