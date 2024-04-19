@@ -142,7 +142,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/construction_management/{id:[0-9]+}/projects", s.constructionManagementHandlers.GetProjects).Methods("GET")
 	api.HandleFunc("/construction_management/{id:[0-9]+}/machines", s.constructionManagementHandlers.GetMachines).Methods("GET")
 
-	api.HandleFunc("/construction_project?work_type={work_type}&start_date={start_date}&end_date={end_date}", s.constructionProjectHandlers.GetList).Methods("GET")
+	api.HandleFunc("/construction_project", s.constructionProjectHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}", s.constructionProjectHandlers.Get).Methods("GET")
 	api.HandleFunc("/construction_project", s.constructionProjectHandlers.Create).Methods("POST")
 	api.HandleFunc("/construction_project/{id:[0-9]+}", s.constructionProjectHandlers.Update).Methods("PUT")
@@ -154,7 +154,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/construction_project/{id:[0-9]+}/reports", s.constructionProjectHandlers.GetReports).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}/exceeded_deadlines_works", s.constructionProjectHandlers.GetExceededDeadlinesWorks).Methods("GET")
 
-	api.HandleFunc("/construction_team", s.constructionTeamHandlers.GetList).Methods("GET")
+	api.HandleFunc("/construction_team?work_type={work_type&start_date={start_date}&end_date={end_date}", s.constructionTeamHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Get).Methods("GET")
 	api.HandleFunc("/construction_team", s.constructionTeamHandlers.Create).Methods("POST")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Update).Methods("PUT")

@@ -11,4 +11,5 @@ type ConstructionTeamRepository interface {
 	Update(ctx context.Context, entity model.ConstructionTeam) error
 	Delete(ctx context.Context, id int) error
 	FindByProject(ctx context.Context, projectID int) ([]*model.ConstructionTeam, error)
+	FindByWorkTypeWithPeriod(ctx context.Context, workTypeId int, startDate string, endDate string) ([]*model.ConstructionTeam, error)
 }

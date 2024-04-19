@@ -30,5 +30,4 @@ func (h *ConstructionWorkerHandlers) Delete(w http.ResponseWriter, r *http.Reque
 }
 
 func (h *ConstructionWorkerHandlers) GetList(w http.ResponseWriter, r *http.Request) {
-
 }

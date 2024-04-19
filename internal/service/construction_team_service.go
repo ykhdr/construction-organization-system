@@ -30,6 +30,14 @@ func (s *ConstructionTeamService) GetWorkTypes(teamId int, startDate, endDate st
 	return workTypes, nil
 }
 
+func (s *ConstructionTeamService) GetTeams(workTypeId int, startDate string, endDate string) ([]*model.ConstructionTeam, error) {
+	teams, err := s.constructionTeamRepository.FindByWorkTypeWithPeriod(context.Background(), workTypeId, startDate, endDate)
+	if err != nil {
+		return nil, err
+	}
+	return teams, nil
+}
+
 func NewConstructionTeamService(repo repository.ConstructionTeamRepository) *ConstructionTeamService {
 	return &ConstructionTeamService{constructionTeamRepository: repo}
 }

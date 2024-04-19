@@ -85,3 +85,34 @@ func (repo *constructionTeamRepository) FindByProject(ctx context.Context, proje
 
 	return teams, nil
 }
+
+func (repo *constructionTeamRepository) FindByWorkTypeWithPeriod(ctx context.Context, workTypeId int, startDate string, endDate string) ([]*model.ConstructionTeam, error) {
+	var entities []*model.ConstructionTeam
+
+	rows, err := repo.db.QueryContext(ctx, `
+		SELECT ct.id, ct.name, ct.project_id
+		FROM construction_team AS ct
+			 JOIN work_schedule AS ws ON ct.id = ws.construction_team_id
+		WHERE ws.work_type_id = $1
+		  AND ws.work_type_id != 0
+		  AND ($2 = '' OR ws.fact_start_date < $2)
+		  AND ($3 = '' OR ws.fact_end_date > $3)
+	`, workTypeId, startDate, endDate)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var entity model.ConstructionTeam
+		err := rows.Scan(&entity.ID, &entity.Name, &entity.ProjectID)
+		if err != nil {
+			return nil, err
+		}
+		entities = append(entities, &entity)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return entities, nil
+}
