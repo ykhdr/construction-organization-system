@@ -51,3 +51,35 @@ func (repo *materialRepository) Delete(ctx context.Context, id int) error {
 	}
 	return nil
 }
+
+func (repo *materialRepository) FindByEstimateWithExceededUsage(ctx context.Context, estimateID int) ([]*model.Material, error) {
+	var entities []*model.Material
+
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT m.id, m.name, m.cost
+	FROM material_usage AS mu
+		JOIN estimate AS e ON mu.estimate_id = e.id
+		JOIN material AS m ON mu.material_id = m.id
+	WHERE e.id = $1 
+		AND mu.fact_quantity > mu.plan_quantity
+	`, estimateID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var entity model.Material
+		err = rows.Scan(&entity.ID, &entity.Name, &entity.Cost)
+		if err != nil {
+			return nil, err
+		}
+		entities = append(entities, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return entities, nil
+}

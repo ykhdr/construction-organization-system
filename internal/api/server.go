@@ -196,6 +196,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/estimate", s.estimateHandlers.Create).Methods("POST")
 	api.HandleFunc("/estimate/{id:[0-9]+}", s.estimateHandlers.Update).Methods("PUT")
 	api.HandleFunc("/estimate/{id:[0-9]+}", s.estimateHandlers.Delete).Methods("DELETE")
+	api.HandleFunc("/estimate/{id:[0-9]+}/exceeded_usage_material", s.estimateHandlers.GetExceededUsageMaterials).Methods("GET")
 
 	api.HandleFunc("/report", s.reportHandlers.GetList).Methods("GET")
 	api.HandleFunc("/report/{id:[0-9]+}", s.reportHandlers.Get).Methods("GET")

@@ -10,4 +10,5 @@ type MaterialRepository interface {
 	Find(ctx context.Context, id int) (*model.Material, error)
 	Update(ctx context.Context, entity model.Material) error
 	Delete(ctx context.Context, id int) error
+	FindByEstimateWithExceededUsage(ctx context.Context, estimateID int) ([]*model.Material, error)
 }
