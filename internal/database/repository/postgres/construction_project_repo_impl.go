@@ -112,3 +112,63 @@ func (repo *constructionProjectRepository) FindByBuildingSite(ctx context.Contex
 
 	return projects, nil
 }
+
+func (repo *constructionProjectRepository) FindAll(ctx context.Context) ([]*model.ConstructionProject, error) {
+	var projects []*model.ConstructionProject
+
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT id, name, building_site_id
+	FROM construction_project
+	WHERE id != 0
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var entity model.ConstructionProject
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+			return nil, err
+		}
+		projects = append(projects, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return projects, err
+}
+
+func (repo *constructionProjectRepository) FindByWorkTypeWithPeriod(ctx context.Context, workTypeID int, startDate string, endDate string) ([]*model.ConstructionProject, error) {
+	var projects []*model.ConstructionProject
+
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT cp.id, cp.name, cp.building_site_id
+	FROM construction_project AS cp 
+		JOIN work_schedule AS ws ON cp.id = ws.project_id
+	WHERE cp.id != 0
+		AND ($1 = 0 OR ws.work_type_id = $1)
+		AND ($2 = '' OR ws.fact_start_date >= $2)
+		AND ($3 = '' OR ws.fact_end_date <= $3)
+	`, workTypeID, startDate, endDate)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var entity model.ConstructionProject
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+			return nil, err
+		}
+		projects = append(projects, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return projects, err
+}

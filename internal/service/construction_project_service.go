@@ -72,3 +72,21 @@ func (s *ConstructionProjectService) GetReports(projectId int) ([]*model.Report,
 
 	return reports, nil
 }
+
+func (s *ConstructionProjectService) GetProjects(workTypeID int, startDate, endDate string) ([]*model.ConstructionProject, error) {
+	var projects []*model.ConstructionProject
+	var err error
+	ctx := context.Background()
+
+	if workTypeID == 0 {
+		projects, err = s.constructionProjectRepository.FindByWorkTypeWithPeriod(ctx, workTypeID, startDate, endDate)
+	} else {
+		projects, err = s.constructionProjectRepository.FindAll(context.Background())
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return projects, err
+}

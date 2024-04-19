@@ -12,4 +12,6 @@ type ConstructionProjectRepository interface {
 	Delete(ctx context.Context, id int) error
 	FindByConstructionManagement(ctx context.Context, managementId int) ([]*model.ConstructionProject, error)
 	FindByBuildingSite(ctx context.Context, siteId int) ([]*model.ConstructionProject, error)
+	FindAll(ctx context.Context) ([]*model.ConstructionProject, error)
+	FindByWorkTypeWithPeriod(ctx context.Context, workTypeID int, startDate string, endDate string) ([]*model.ConstructionProject, error)
 }
