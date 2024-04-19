@@ -109,6 +109,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/building_organization", s.buildingOrganizationHandlers.Create).Methods("POST")
 	api.HandleFunc("/building_organization/{id:[0-9]+}", s.buildingOrganizationHandlers.Update).Methods("PUT")
 	api.HandleFunc("/building_organization/{id:[0-9]+}", s.buildingOrganizationHandlers.Delete).Methods("DELETE")
+	api.HandleFunc("/building_organization/{id:[0-9]+}/projects", s.buildingOrganizationHandlers.GetProjects).Methods("GET")
 
 	api.HandleFunc("/building_site", s.buildingSiteHandlers.GetList).Methods("GET")
 	api.HandleFunc("/building_site/{id:[0-9]+}", s.buildingSiteHandlers.Get).Methods("GET")
@@ -151,6 +152,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/construction_project/{id:[0-9]+}/construction_teams", s.constructionProjectHandlers.GetConstructionTeams).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}/machines?start_date={start_date}&end_date={end_date}", s.constructionProjectHandlers.GetMachines).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}/reports", s.constructionProjectHandlers.GetReports).Methods("GET")
+	api.HandleFunc("/construction_project/{id:[0-9]+}/exceeded_deadlines_works", s.constructionProjectHandlers.GetExceededDeadlinesWorks).Methods("GET")
 
 	api.HandleFunc("/construction_team", s.constructionTeamHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Get).Methods("GET")

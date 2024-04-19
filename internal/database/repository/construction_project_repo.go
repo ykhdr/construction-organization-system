@@ -14,4 +14,5 @@ type ConstructionProjectRepository interface {
 	FindByBuildingSite(ctx context.Context, siteId int) ([]*model.ConstructionProject, error)
 	FindAll(ctx context.Context) ([]*model.ConstructionProject, error)
 	FindByWorkTypeWithPeriod(ctx context.Context, workTypeID int, startDate string, endDate string) ([]*model.ConstructionProject, error)
+	FindByOrganization(ctx context.Context, organizationID int) ([]*model.ConstructionProject, error)
 }

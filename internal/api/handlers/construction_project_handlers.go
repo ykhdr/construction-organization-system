@@ -193,3 +193,25 @@ func (h *ConstructionProjectHandlers) GetReports(w http.ResponseWriter, r *http.
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func (h *ConstructionProjectHandlers) GetExceededDeadlinesWorks(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	workTypes, err := h.constructionProjectService.GetExceededDeadlinesWorks(projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(workTypes)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}

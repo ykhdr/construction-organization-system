@@ -13,6 +13,7 @@ type ConstructionProjectService struct {
 	constructionMachineryRepository repository.ConstructionMachineryRepository
 	estimateRepository              repository.EstimateRepository
 	reportRepository                repository.ReportRepository
+	workTypeRepository              repository.WorkTypeRepository
 }
 
 func NewConstructionProjectService(constructionProjectRepo repository.ConstructionProjectRepository, workScheduleRepo repository.WorkScheduleRepository) *ConstructionProjectService {
@@ -89,4 +90,13 @@ func (s *ConstructionProjectService) GetProjects(workTypeID int, startDate, endD
 	}
 
 	return projects, err
+}
+
+func (s *ConstructionProjectService) GetExceededDeadlinesWorks(projectId int) ([]*model.WorkType, error) {
+	workTypes, err := s.workTypeRepository.FindByProjectWithExceededWorkDeadlines(context.Background(), projectId)
+	if err != nil {
+		return nil, err
+	}
+
+	return workTypes, nil
 }

@@ -51,3 +51,32 @@ func (repo *workTypeRepository) Delete(ctx context.Context, id int) error {
 	}
 	return nil
 }
+
+func (repo *workTypeRepository) FindByProjectWithExceededWorkDeadlines(ctx context.Context, projectID int) ([]*model.WorkType, error) {
+	var entities []*model.WorkType
+
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT wt.id, wt.name
+	FROM work_schedule AS ws
+		JOIN work_type AS wt ON ws.work_type_id = wt.id
+	WHERE ws.id != 0
+		AND wt.id != 0 
+		AND ws.project_id = $1
+		AND ws.fact_end_date > ws.plan_end_date
+	`, projectID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		var entity model.WorkType
+		if err := rows.Scan(&entity.ID, &entity.Name); err != nil {
+			return nil, err
+		}
+		entities = append(entities, &entity)
+	}
+
+	return entities, nil
+}

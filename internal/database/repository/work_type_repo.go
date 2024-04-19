@@ -10,4 +10,5 @@ type WorkTypeRepository interface {
 	Find(ctx context.Context, id int) (*model.WorkType, error)
 	Update(ctx context.Context, entity model.WorkType) error
 	Delete(ctx context.Context, id int) error
+	FindByProjectWithExceededWorkDeadlines(ctx context.Context, projectID int) ([]*model.WorkType, error)
 }

@@ -172,3 +172,34 @@ func (repo *constructionProjectRepository) FindByWorkTypeWithPeriod(ctx context.
 
 	return projects, err
 }
+
+func (repo *constructionProjectRepository) FindByOrganization(ctx context.Context, organizationID int) ([]*model.ConstructionProject, error) {
+	var projects []*model.ConstructionProject
+
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT cp.id, cp.name, cp.building_site_id
+	FROM building_organization AS bo
+		JOIN construction_contract AS cc ON bo.id = cc.building_organization_id
+		JOIN construction_project AS cp ON cc.project_id = cp.id
+	WHERE bo.id = $1
+	AND bo.id != 0
+
+	`, organizationID)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var entity model.ConstructionProject
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+			return nil, err
+		}
+		projects = append(projects, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return projects, nil
+}
