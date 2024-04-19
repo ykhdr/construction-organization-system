@@ -10,7 +10,7 @@ WHERE NOT EXISTS(SELECT id
                  FROM building_organization
                  WHERE id = 0);
 
-INSERT INTO engineer_worker(id, name, surname, patronymic, age, seniority, building_organization_id, skill_level,
+INSERT INTO engineer_worker(id, name, surname, patronymic, age, seniority, building_organization_id,
                             position_id)
 SELECT 0,
        'UNKNOWN',
@@ -19,7 +19,6 @@ SELECT 0,
        1,
        1,
        0,
-       'UNKNOWN',
        0
 WHERE NOT EXISTS(SELECT id
                  FROM engineer_worker
