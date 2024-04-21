@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS apartment_house
 (
-    floors integer NOT NULL CHECK ( floors > 0 ),
-    UNIQUE (id)
-) INHERITS (construction_project)
+    project_id integer PRIMARY KEY REFERENCES construction_project (id) ON DELETE CASCADE,
+    floors     integer NOT NULL CHECK ( floors > 0 )
+)

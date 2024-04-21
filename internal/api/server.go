@@ -46,13 +46,28 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 	estimateRepository := postgres.NewEstimateRepository(db)
 	reportRepository := postgres.NewReportRepository(db)
 	workScheduleRepository := postgres.NewWorkScheduleRepository(db)
+	workTypeRepository := postgres.NewWorkTypeRepository(db)
+	schoolRepository := postgres.NewSchoolRepository(db)
+	apartmentHouseRepository := postgres.NewApartmentHouseRepository(db)
+	bridgeRepository := postgres.NewBridgeRepository(db)
 
 	buildingOrganizationService := service.NewBuildingOrganizationService(buildingOrganizationRepository)
 	buildingSiteService := service.NewBuildingSiteService(buildingSiteRepository, engineerWorkerRepository)
 	constructionContractService := service.NewConstructionContractService(constructionContractRepository)
 	constructionMachineryService := service.NewConstructionMachineryService(constructionMachineryRepository)
 	constructionManagementService := service.NewConstructionManagementService(constructionManagementRepository, engineerWorkerRepository)
-	constructionProjectService := service.NewConstructionProjectService(constructionProjectRepository, workScheduleRepository)
+	constructionProjectService := service.NewConstructionProjectService(
+		constructionProjectRepository,
+		workScheduleRepository,
+		constructionTeamRepository,
+		constructionMachineryRepository,
+		estimateRepository,
+		reportRepository,
+		workTypeRepository,
+		schoolRepository,
+		apartmentHouseRepository,
+		bridgeRepository,
+	)
 	constructionTeamService := service.NewConstructionTeamService(constructionTeamRepository)
 	constructionWorkerService := service.NewConstructionWorkerService(constructionWorkerRepository)
 	customerOrganizationService := service.NewCustomerOrganizationService(customerOrganizationRepository)
@@ -210,6 +225,24 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/work_schedule", s.workScheduleHandlers.Create).Methods("POST")
 	api.HandleFunc("/work_schedule/{id:[0-9]+}", s.workScheduleHandlers.Update).Methods("PUT")
 	api.HandleFunc("/work_schedule/{id:[0-9]+}", s.workScheduleHandlers.Delete).Methods("DELETE")
+
+	api.HandleFunc("/school", s.constructionProjectHandlers.GetSchoolList).Methods("GET")
+	api.HandleFunc("/school/{id:[0-9]+}", s.constructionProjectHandlers.GetSchool).Methods("GET")
+	api.HandleFunc("/school", s.constructionProjectHandlers.CreateSchool).Methods("POST")
+	api.HandleFunc("/school/{id:[0-9]+}", s.constructionProjectHandlers.UpdateSchool).Methods("PUT")
+	api.HandleFunc("/school/{id:[0-9]+}", s.constructionProjectHandlers.DeleteSchool).Methods("DELETE")
+
+	api.HandleFunc("/apartment_house", s.constructionProjectHandlers.GetApartmentHouseList).Methods("GET")
+	api.HandleFunc("/apartment_house/{id:[0-9]+}", s.constructionProjectHandlers.GetApartmentHouse).Methods("GET")
+	api.HandleFunc("/apartment_house", s.constructionProjectHandlers.CreateApartmentHouse).Methods("POST")
+	api.HandleFunc("/apartment_house/{id:[0-9]+}", s.constructionProjectHandlers.UpdateApartmentHouse).Methods("PUT")
+	api.HandleFunc("/apartment_house/{id:[0-9]+}", s.constructionProjectHandlers.DeleteApartmentHouse).Methods("DELETE")
+
+	api.HandleFunc("/bridge", s.constructionProjectHandlers.GetBridgeList).Methods("GET")
+	api.HandleFunc("/bridge/{id:[0-9]+}", s.constructionProjectHandlers.GetBridge).Methods("GET")
+	api.HandleFunc("/bridge", s.constructionProjectHandlers.CreateBridge).Methods("POST")
+	api.HandleFunc("/bridge/{id:[0-9]+}", s.constructionProjectHandlers.UpdateBridge).Methods("PUT")
+	api.HandleFunc("/bridge/{id:[0-9]+}", s.constructionProjectHandlers.DeleteBridge).Methods("DELETE")
 }
 
 func (s *Server) Start() {

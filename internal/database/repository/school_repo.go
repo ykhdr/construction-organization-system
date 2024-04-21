@@ -10,4 +10,5 @@ type SchoolRepository interface {
 	Find(ctx context.Context, id int) (*model.School, error)
 	Update(ctx context.Context, entity model.School) error
 	Delete(ctx context.Context, id int) error
+	FindAll(ctx context.Context) ([]*model.School, error)
 }

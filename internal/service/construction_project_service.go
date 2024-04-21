@@ -14,10 +14,24 @@ type ConstructionProjectService struct {
 	estimateRepository              repository.EstimateRepository
 	reportRepository                repository.ReportRepository
 	workTypeRepository              repository.WorkTypeRepository
+	schoolRepository                repository.SchoolRepository
+	apartmentHouseRepository        repository.ApartmentHouseRepository
+	bridgeRepository                repository.BridgeRepository
 }
 
-func NewConstructionProjectService(constructionProjectRepo repository.ConstructionProjectRepository, workScheduleRepo repository.WorkScheduleRepository) *ConstructionProjectService {
-	return &ConstructionProjectService{constructionProjectRepository: constructionProjectRepo, workScheduleRepository: workScheduleRepo}
+func NewConstructionProjectService(projectRepository repository.ConstructionProjectRepository,
+	workScheduleRepository repository.WorkScheduleRepository,
+	constructionTeamRepository repository.ConstructionTeamRepository,
+	constructionMachineryRepository repository.ConstructionMachineryRepository,
+	estimateRepository repository.EstimateRepository,
+	reportRepository repository.ReportRepository,
+	workTypeRepository repository.WorkTypeRepository,
+	schoolRepository repository.SchoolRepository,
+	apartmentHouseRepository repository.ApartmentHouseRepository,
+	bridgeRepository repository.BridgeRepository) *ConstructionProjectService {
+	return &ConstructionProjectService{projectRepository, workScheduleRepository, constructionTeamRepository,
+		constructionMachineryRepository, estimateRepository, reportRepository, workTypeRepository, schoolRepository,
+		apartmentHouseRepository, bridgeRepository}
 }
 
 func (s *ConstructionProjectService) GetWorkSchedules(projectID int) ([]*model.WorkSchedule, error) {
@@ -99,4 +113,139 @@ func (s *ConstructionProjectService) GetExceededDeadlinesWorks(projectId int) ([
 	}
 
 	return workTypes, nil
+}
+
+func (s *ConstructionProjectService) GetSchoolList() ([]*model.School, error) {
+	schools, err := s.schoolRepository.FindAll(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	return schools, nil
+}
+
+func (s *ConstructionProjectService) CreateSchool(school model.School) error {
+	_, err := s.schoolRepository.Save(context.Background(), school)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *ConstructionProjectService) GetSchool(projectId int) (*model.School, error) {
+	school, err := s.schoolRepository.Find(context.Background(), projectId)
+	if err != nil {
+		return nil, err
+	}
+
+	return school, nil
+}
+
+func (s *ConstructionProjectService) UpdateSchool(school model.School) error {
+	err := s.schoolRepository.Update(context.Background(), school)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *ConstructionProjectService) DeleteSchool(projectId int) error {
+	err := s.schoolRepository.Delete(context.Background(), projectId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *ConstructionProjectService) GetApartmentHouseList() ([]*model.ApartmentHouse, error) {
+	houses, err := s.apartmentHouseRepository.FindAll(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	return houses, nil
+}
+
+func (s *ConstructionProjectService) GetApartmentHouse(projectId int) (*model.ApartmentHouse, error) {
+	house, err := s.apartmentHouseRepository.Find(context.Background(), projectId)
+	if err != nil {
+		return nil, err
+	}
+
+	return house, nil
+}
+
+func (s *ConstructionProjectService) UpdateApartmentHouse(house model.ApartmentHouse) error {
+	err := s.apartmentHouseRepository.Update(context.Background(), house)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *ConstructionProjectService) DeleteApartmentHouse(projectId int) error {
+	err := s.apartmentHouseRepository.Delete(context.Background(), projectId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *ConstructionProjectService) CreateApartmentHouse(house model.ApartmentHouse) error {
+	_, err := s.apartmentHouseRepository.Save(context.Background(), house)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *ConstructionProjectService) GetBridgeList() ([]*model.Bridge, error) {
+	bridges, err := s.bridgeRepository.FindAll(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	return bridges, nil
+}
+
+func (s *ConstructionProjectService) GetBridge(projectId int) (*model.Bridge, error) {
+	bridge, err := s.bridgeRepository.Find(context.Background(), projectId)
+	if err != nil {
+		return nil, err
+	}
+
+	return bridge, nil
+}
+
+func (s *ConstructionProjectService) CreateBridge(bridge model.Bridge) error {
+	_, err := s.bridgeRepository.Save(context.Background(), bridge)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *ConstructionProjectService) UpdateBridge(bridge model.Bridge) error {
+	err := s.bridgeRepository.Update(context.Background(), bridge)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *ConstructionProjectService) DeleteBridge(projectId int) error {
+	err := s.bridgeRepository.Delete(context.Background(), projectId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

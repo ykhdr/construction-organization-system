@@ -17,8 +17,8 @@ func NewConstructionProjectRepository(db *sql.DB) repository.ConstructionProject
 
 func (repo *constructionProjectRepository) Save(ctx context.Context, entity model.ConstructionProject) (int, error) {
 	var newId int
-	err := repo.db.QueryRowContext(ctx, "INSERT INTO construction_project(name, building_site_id) VALUES ($1, $2); INSERT INTO estimate(id, last_update_date) VALUES (LASTVAL(), NOW()) RETURNING id",
-		entity.Name, entity.BuildingSiteID).Scan(&newId)
+	err := repo.db.QueryRowContext(ctx, "INSERT INTO construction_project(name, building_site_id, type) VALUES ($1, $2, $3); INSERT INTO estimate(id, last_update_date) VALUES (LASTVAL(), NOW()) RETURNING id",
+		entity.Name, entity.BuildingSiteID, entity.ProjectType).Scan(&newId)
 	if err != nil {
 		return 0, err
 	}
@@ -27,8 +27,8 @@ func (repo *constructionProjectRepository) Save(ctx context.Context, entity mode
 
 func (repo *constructionProjectRepository) Find(ctx context.Context, id int) (*model.ConstructionProject, error) {
 	var entity model.ConstructionProject
-	err := repo.db.QueryRowContext(ctx, "SELECT id, name, building_site_id FROM construction_project WHERE id = $1 AND id != 0", id).
-		Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID)
+	err := repo.db.QueryRowContext(ctx, "SELECT id, name, building_site_id, type FROM construction_project WHERE id = $1 AND id != 0", id).
+		Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID, &entity.ProjectType)
 	if err != nil {
 		return nil, err
 	}
@@ -36,8 +36,8 @@ func (repo *constructionProjectRepository) Find(ctx context.Context, id int) (*m
 }
 
 func (repo *constructionProjectRepository) Update(ctx context.Context, entity model.ConstructionProject) error {
-	_, err := repo.db.ExecContext(ctx, "UPDATE construction_project SET name = $1, building_site_id = $2 WHERE id = $3",
-		entity.Name, entity.BuildingSiteID, entity.ID)
+	_, err := repo.db.ExecContext(ctx, "UPDATE construction_project SET name = $1, building_site_id = $2, type = $3 WHERE id = $4",
+		entity.Name, entity.BuildingSiteID, entity.ProjectType, entity.ID)
 	if err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func (repo *constructionProjectRepository) FindByConstructionManagement(ctx cont
 	var projects []*model.ConstructionProject
 
 	rows, err := repo.db.QueryContext(ctx, `
-	SELECT cp.id, cp.name, cp.building_site_id 
+	SELECT cp.id, cp.name, cp.building_site_id, cp.type
 	FROM construction_management AS cm
         JOIN building_site AS bs ON cm.id = bs.management_id
         JOIN construction_project AS cp ON bs.id = cp.building_site_id
@@ -87,7 +87,7 @@ func (repo *constructionProjectRepository) FindByBuildingSite(ctx context.Contex
 	var projects []*model.ConstructionProject
 
 	rows, err := repo.db.QueryContext(ctx, `
-	SELECT cp.id, cp.name, cp.building_site_id 
+	SELECT cp.id, cp.name, cp.building_site_id, cp.type 
     FROM building_site AS bs 
         JOIN construction_project AS cp ON bs.id = cp.building_site_id
 	WHERE bs.id = $1
@@ -117,7 +117,7 @@ func (repo *constructionProjectRepository) FindAll(ctx context.Context) ([]*mode
 	var projects []*model.ConstructionProject
 
 	rows, err := repo.db.QueryContext(ctx, `
-	SELECT id, name, building_site_id
+	SELECT id, name, building_site_id, type
 	FROM construction_project
 	WHERE id != 0
 	`)
@@ -145,7 +145,7 @@ func (repo *constructionProjectRepository) FindByWorkTypeWithPeriod(ctx context.
 	var projects []*model.ConstructionProject
 
 	rows, err := repo.db.QueryContext(ctx, `
-	SELECT cp.id, cp.name, cp.building_site_id
+	SELECT cp.id, cp.name, cp.building_site_id, cp.type
 	FROM construction_project AS cp 
 		JOIN work_schedule AS ws ON cp.id = ws.project_id
 	WHERE cp.id != 0
@@ -177,7 +177,7 @@ func (repo *constructionProjectRepository) FindByOrganization(ctx context.Contex
 	var projects []*model.ConstructionProject
 
 	rows, err := repo.db.QueryContext(ctx, `
-	SELECT cp.id, cp.name, cp.building_site_id
+	SELECT cp.id, cp.name, cp.building_site_id, cp.type
 	FROM building_organization AS bo
 		JOIN construction_contract AS cc ON bo.id = cc.building_organization_id
 		JOIN construction_project AS cp ON cc.project_id = cp.id

@@ -7,4 +7,5 @@ type Bridge struct {
 	TrafficLanesNumber int    `db:"traffic_lanes_number" json:"traffic_lanes_number"`
 	Name               string `db:"name" json:"name"`
 	BuildingSiteID     int    `db:"building_site_id" json:"building_site_id"`
+	ProjectType        string `db:"type" json:"type"`
 }

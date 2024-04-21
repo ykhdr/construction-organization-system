@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"construction-organization-system/internal/model"
 	"construction-organization-system/internal/service"
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -214,4 +215,313 @@ func (h *ConstructionProjectHandlers) GetExceededDeadlinesWorks(w http.ResponseW
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func (h *ConstructionProjectHandlers) GetSchoolList(w http.ResponseWriter, r *http.Request) {
+	school, err := h.constructionProjectService.GetSchoolList()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(school)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h *ConstructionProjectHandlers) GetSchool(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	school, err := h.constructionProjectService.GetSchool(projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(school)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h *ConstructionProjectHandlers) CreateSchool(w http.ResponseWriter, r *http.Request) {
+	var school model.School
+
+	//var data map[string]interface{}
+	//if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+	//	http.Error(w, err.Error(), http.StatusBadRequest)
+	//	return
+	//}
+
+	err := json.NewDecoder(r.Body).Decode(&school)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = h.constructionProjectService.CreateSchool(school)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	if err := json.NewEncoder(w).Encode(school); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *ConstructionProjectHandlers) UpdateSchool(w http.ResponseWriter, r *http.Request) {
+	var school model.School
+
+	if err := json.NewDecoder(r.Body).Decode(&school); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err := h.constructionProjectService.UpdateSchool(school)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(school); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *ConstructionProjectHandlers) DeleteSchool(w http.ResponseWriter, r *http.Request) {
+	var vars = mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = h.constructionProjectService.DeleteSchool(projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func (h *ConstructionProjectHandlers) GetApartmentHouseList(w http.ResponseWriter, r *http.Request) {
+	houses, err := h.constructionProjectService.GetApartmentHouseList()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(houses)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h *ConstructionProjectHandlers) GetApartmentHouse(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	house, err := h.constructionProjectService.GetApartmentHouse(projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(house)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h *ConstructionProjectHandlers) CreateApartmentHouse(w http.ResponseWriter, r *http.Request) {
+	var house model.ApartmentHouse
+	err := json.NewDecoder(r.Body).Decode(&house)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = h.constructionProjectService.CreateApartmentHouse(house)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	if err := json.NewEncoder(w).Encode(house); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *ConstructionProjectHandlers) UpdateApartmentHouse(w http.ResponseWriter, r *http.Request) {
+	var house model.ApartmentHouse
+	err := json.NewDecoder(r.Body).Decode(&house)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = h.constructionProjectService.UpdateApartmentHouse(house)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(house); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *ConstructionProjectHandlers) DeleteApartmentHouse(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = h.constructionProjectService.DeleteApartmentHouse(projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func (h *ConstructionProjectHandlers) GetBridgeList(w http.ResponseWriter, r *http.Request) {
+	bridges, err := h.constructionProjectService.GetBridgeList()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(bridges)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h *ConstructionProjectHandlers) GetBridge(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	bridge, err := h.constructionProjectService.GetBridge(projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(bridge)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h *ConstructionProjectHandlers) CreateBridge(w http.ResponseWriter, r *http.Request) {
+	var bridge model.Bridge
+
+	err := json.NewDecoder(r.Body).Decode(&bridge)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = h.constructionProjectService.CreateBridge(bridge)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	if err := json.NewEncoder(w).Encode(bridge); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *ConstructionProjectHandlers) UpdateBridge(w http.ResponseWriter, r *http.Request) {
+	var bridge model.Bridge
+	err := json.NewDecoder(r.Body).Decode(&bridge)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = h.constructionProjectService.UpdateBridge(bridge)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(bridge); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *ConstructionProjectHandlers) DeleteBridge(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	projectId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = h.constructionProjectService.DeleteBridge(projectId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

@@ -5,4 +5,5 @@ type ApartmentHouse struct {
 	Floors         int    `db:"floors" json:"floors"`
 	Name           string `db:"name" json:"name"`
 	BuildingSiteID int    `db:"building_site_id" json:"building_site_id"`
+	ProjectType    string `db:"type" json:"type"`
 }
