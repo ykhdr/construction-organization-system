@@ -10,5 +10,6 @@ BEGIN
     THEN
         RAISE WARNING 'Team has a work in schedule at same time';
     END IF;
+    RETURN NEW;
 END;
 $$ language plpgsql
