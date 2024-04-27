@@ -57,8 +57,8 @@ func (repo *materialRepository) FindByEstimateWithExceededUsage(ctx context.Cont
 
 	rows, err := repo.db.QueryContext(ctx, `
 	SELECT m.id, m.name, m.cost
-	FROM material_usage AS mu
-		JOIN estimate AS e ON mu.estimate_id = e.id
+	FROM estimate AS e 
+		JOIN material_usage AS mu ON mu.estimate_id = e.id
 		JOIN material AS m ON mu.material_id = m.id
 	WHERE e.id = $1 
 		AND mu.fact_quantity > mu.plan_quantity

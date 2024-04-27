@@ -50,12 +50,17 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 	schoolRepository := postgres.NewSchoolRepository(db)
 	apartmentHouseRepository := postgres.NewApartmentHouseRepository(db)
 	bridgeRepository := postgres.NewBridgeRepository(db)
+	materialRepository := postgres.NewMaterialRepository(db)
 
 	buildingOrganizationService := service.NewBuildingOrganizationService(buildingOrganizationRepository)
 	buildingSiteService := service.NewBuildingSiteService(buildingSiteRepository, engineerWorkerRepository)
 	constructionContractService := service.NewConstructionContractService(constructionContractRepository)
 	constructionMachineryService := service.NewConstructionMachineryService(constructionMachineryRepository)
-	constructionManagementService := service.NewConstructionManagementService(constructionManagementRepository, engineerWorkerRepository)
+	constructionManagementService := service.NewConstructionManagementService(
+		constructionManagementRepository,
+		engineerWorkerRepository,
+		constructionProjectRepository,
+		constructionMachineryRepository)
 	constructionProjectService := service.NewConstructionProjectService(
 		constructionProjectRepository,
 		workScheduleRepository,
@@ -74,7 +79,7 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 	employeeService := service.NewEmployeeService(employeeRepository)
 	engineerTeamService := service.NewEngineerTeamService(engineerTeamRepository)
 	engineerWorkerService := service.NewEngineerWorkerService(engineerWorkerRepository)
-	estimateService := service.NewEstimateService(estimateRepository)
+	estimateService := service.NewEstimateService(estimateRepository, materialRepository)
 	reportService := service.NewReportService(reportRepository)
 	workScheduleService := service.NewWorkScheduleService(workScheduleRepository)
 

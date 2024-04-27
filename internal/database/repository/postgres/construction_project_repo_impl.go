@@ -70,7 +70,7 @@ func (repo *constructionProjectRepository) FindByConstructionManagement(ctx cont
 
 	for rows.Next() {
 		var entity model.ConstructionProject
-		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID, &entity.ProjectType); err != nil {
 			return nil, err
 		}
 		projects = append(projects, &entity)
@@ -100,7 +100,7 @@ func (repo *constructionProjectRepository) FindByBuildingSite(ctx context.Contex
 
 	for rows.Next() {
 		var entity model.ConstructionProject
-		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID, &entity.ProjectType); err != nil {
 			return nil, err
 		}
 		projects = append(projects, &entity)
@@ -128,7 +128,7 @@ func (repo *constructionProjectRepository) FindAll(ctx context.Context) ([]*mode
 
 	for rows.Next() {
 		var entity model.ConstructionProject
-		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID, &entity.ProjectType); err != nil {
 			return nil, err
 		}
 		projects = append(projects, &entity)
@@ -160,7 +160,7 @@ func (repo *constructionProjectRepository) FindByWorkTypeWithPeriod(ctx context.
 
 	for rows.Next() {
 		var entity model.ConstructionProject
-		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID, &entity.ProjectType); err != nil {
 			return nil, err
 		}
 		projects = append(projects, &entity)
@@ -191,7 +191,7 @@ func (repo *constructionProjectRepository) FindByOrganization(ctx context.Contex
 
 	for rows.Next() {
 		var entity model.ConstructionProject
-		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID); err != nil {
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.BuildingSiteID, &entity.ProjectType); err != nil {
 			return nil, err
 		}
 		projects = append(projects, &entity)

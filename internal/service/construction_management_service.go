@@ -14,8 +14,8 @@ type ConstructionManagementService struct {
 	constructionMachineryRepository  repository.ConstructionMachineryRepository
 }
 
-func NewConstructionManagementService(constructionManagementRepo repository.ConstructionManagementRepository, engineerWorkerRepo repository.EngineerWorkerRepository) *ConstructionManagementService {
-	return &ConstructionManagementService{constructionManagementRepository: constructionManagementRepo, engineerWorkerRepository: engineerWorkerRepo}
+func NewConstructionManagementService(constructionManagementRepository repository.ConstructionManagementRepository, engineerWorkerRepository repository.EngineerWorkerRepository, projectRepository repository.ConstructionProjectRepository, constructionMachineryRepository repository.ConstructionMachineryRepository) *ConstructionManagementService {
+	return &ConstructionManagementService{constructionManagementRepository: constructionManagementRepository, engineerWorkerRepository: engineerWorkerRepository, projectRepository: projectRepository, constructionMachineryRepository: constructionMachineryRepository}
 }
 
 func (s *ConstructionManagementService) GetById(id int) (*model.ConstructionManagement, error) {

@@ -97,7 +97,7 @@ func (h *ConstructionManagementHandlers) GetManager(w http.ResponseWriter, r *ht
 
 func (h *ConstructionManagementHandlers) GetEngineers(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	managementId, err := strconv.Atoi(vars["management-id"])
+	managementId, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

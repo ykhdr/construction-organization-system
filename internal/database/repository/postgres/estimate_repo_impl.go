@@ -26,24 +26,50 @@ func (repo *estimateRepository) Save(ctx context.Context, entity model.Estimate)
 }
 
 func (repo *estimateRepository) Find(ctx context.Context, id int) (*model.Estimate, error) {
-	query := `
-	SELECT e.id, m.name, m.cost, mu.plan_quantity, mu.fact_quantity, e.last_update_date
+	var estimate model.Estimate
+	err := repo.db.QueryRowContext(ctx, `
+	SELECT e.id, e.last_update_date
 	FROM construction_project AS cp
          JOIN estimate AS e ON cp.id = e.id
-         JOIN material_usage AS mu ON e.id = mu.estimate_id
-         JOIN material AS m ON mu.material_id = m.id
 	WHERE cp.id = $1
   		AND cp.id != 0
-	`
+	`, id).Scan(&estimate.ID, &estimate.LastUpdateDate)
+	if err != nil {
+		return nil, err
+	}
 
-	var entity model.Estimate
-	err := repo.db.QueryRowContext(ctx, query, id).
-		Scan(&entity.ID, &entity.MaterialUsage.Material.Name, &entity.MaterialUsage.Material.Cost, &entity.MaterialUsage.PlanQuantity, &entity.MaterialUsage.FactQuantity, &entity.LastUpdateDate)
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT estimate_id, material_id, plan_quantity, fact_quantity, name, cost
+	FROM material_usage AS mu
+		JOIN material AS m ON mu.material_id = m.id
+	WHERE estimate_id = $1
+		AND estimate_id != 1
+	`, id)
 
 	if err != nil {
 		return nil, err
 	}
-	return &entity, nil
+
+	defer rows.Close()
+
+	var materialsUsages []*model.MaterialUsage
+	for rows.Next() {
+		var entity model.MaterialUsage
+		err := rows.Scan(&entity.EstimateID, &entity.Material.ID, &entity.PlanQuantity, &entity.FactQuantity, &entity.Material.Name, &entity.Material.Cost)
+		if err != nil {
+			return nil, err
+		}
+
+		materialsUsages = append(materialsUsages, &entity)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	estimate.MaterialUsage = materialsUsages
+
+	return &estimate, nil
 }
 
 func (repo *estimateRepository) Update(ctx context.Context, entity model.Estimate) error {

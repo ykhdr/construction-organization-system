@@ -54,7 +54,7 @@ func (repo *constructionTeamRepository) Delete(ctx context.Context, id int) erro
 
 func (repo *constructionTeamRepository) FindByProject(ctx context.Context, projectID int) ([]*model.ConstructionTeam, error) {
 	query := `
-		SELECT ct.id, ct.name, ct.project_id
+		SELECT DISTINCT ct.id, ct.name, ct.project_id
 		FROM construction_project AS cp 
 			JOIN work_schedule AS ws ON cp.id = ws.project_id
 			JOIN construction_team AS ct ON ct.project_id = cp.id
@@ -90,7 +90,7 @@ func (repo *constructionTeamRepository) FindByWorkTypeWithPeriod(ctx context.Con
 	var entities []*model.ConstructionTeam
 
 	rows, err := repo.db.QueryContext(ctx, `
-		SELECT ct.id, ct.name, ct.project_id
+		SELECT DISTINCT ct.id, ct.name, ct.project_id
 		FROM construction_team AS ct
 			 JOIN work_schedule AS ws ON ct.id = ws.construction_team_id
 		WHERE ws.work_type_id = $1

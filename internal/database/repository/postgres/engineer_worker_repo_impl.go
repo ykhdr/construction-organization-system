@@ -17,8 +17,8 @@ func NewEngineerWorkerRepository(db *sql.DB) repository.EngineerWorkerRepository
 
 func (repo *engineerWorkerRepository) Save(ctx context.Context, entity model.EngineerWorker) (int, error) {
 	var newId int
-	err := repo.db.QueryRowContext(ctx, "INSERT INTO engineer_worker(name, surname, patronymic, age, seniority, building_organization_id, skill_level, position_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-		entity.Name, entity.Surname, entity.Patronymic, entity.Age, entity.Seniority, entity.BuildingOrganizationID, entity.SkillLevel, entity.Position.ID).Scan(&newId)
+	err := repo.db.QueryRowContext(ctx, "INSERT INTO engineer_worker(name, surname, patronymic, age, seniority, building_organization_id, position_id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+		entity.Name, entity.Surname, entity.Patronymic, entity.Age, entity.Seniority, entity.BuildingOrganizationID, entity.Position.ID).Scan(&newId)
 	if err != nil {
 		return 0, err
 	}
@@ -29,12 +29,12 @@ func (repo *engineerWorkerRepository) Find(ctx context.Context, id int) (*model.
 	var entity model.EngineerWorker
 
 	err := repo.db.QueryRowContext(ctx, `
-		SELECT ew.id, ew.name, ew.surname, ew.patronymic, ew.age, ew.seniority, ew.building_organization_id, ew.skill_level, ep.id, ep.name 
+		SELECT ew.id, ew.name, ew.surname, ew.patronymic, ew.age, ew.seniority, ew.building_organization_id, ep.id, ep.name 
 		FROM engineer_worker AS ew
 		JOIN engineer_position AS ep ON ep.id = ew.position_id
 		WHERE ew.id = $1
 	`, id).
-		Scan(&entity.ID, &entity.Name, &entity.Surname, &entity.Patronymic, &entity.Age, &entity.Seniority, &entity.BuildingOrganizationID, &entity.SkillLevel, &entity.Position.ID, &entity.Position.Name)
+		Scan(&entity.ID, &entity.Name, &entity.Surname, &entity.Patronymic, &entity.Age, &entity.Seniority, &entity.BuildingOrganizationID, &entity.Position.ID, &entity.Position.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +42,8 @@ func (repo *engineerWorkerRepository) Find(ctx context.Context, id int) (*model.
 }
 
 func (repo *engineerWorkerRepository) Update(ctx context.Context, entity model.EngineerWorker) error {
-	_, err := repo.db.ExecContext(ctx, "UPDATE engineer_worker SET name = $1, surname = $2, patronymic = $3, age = $4, seniority = $5, building_organization_id = $6, skill_level = $7, team_id = $8, position_id = $9 WHERE id = $10",
-		entity.Name, entity.Surname, entity.Patronymic, entity.Age, entity.Seniority, entity.BuildingOrganizationID, entity.SkillLevel, entity.Position.ID, entity.ID)
+	_, err := repo.db.ExecContext(ctx, "UPDATE engineer_worker SET name = $1, surname = $2, patronymic = $3, age = $4, seniority = $5, building_organization_id = $6, team_id = $8, position_id = $9 WHERE id = $10",
+		entity.Name, entity.Surname, entity.Patronymic, entity.Age, entity.Seniority, entity.BuildingOrganizationID, entity.Position.ID, entity.ID)
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,7 @@ func (repo *engineerWorkerRepository) FindByBuildingSite(ctx context.Context, bu
 	var engineerWorkers []*model.EngineerWorker
 
 	rows, err := repo.db.QueryContext(ctx, `
-		SELECT ew.id, ew.name, ew.surname, ew.patronymic, ew.age, ew.seniority, ew.building_organization_id, ew.skill_level, ep.id, ep.name 
+		SELECT ew.id, ew.name, ew.surname, ew.patronymic, ew.age, ew.seniority, ew.building_organization_id, ep.id, ep.name 
 		FROM building_site AS bs
         	JOIN construction_project AS cp ON bs.id = cp.building_site_id
         	JOIN engineer_team AS et ON cp.id = et.project_id
@@ -78,7 +78,7 @@ func (repo *engineerWorkerRepository) FindByBuildingSite(ctx context.Context, bu
 
 	for rows.Next() {
 		var entity model.EngineerWorker
-		if err := rows.Scan(&entity.ID, &entity.Name, &entity.Surname, &entity.Patronymic, &entity.Age, &entity.Seniority, &entity.BuildingOrganizationID, &entity.SkillLevel, &entity.Position.ID, &entity.Position.Name); err != nil {
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.Surname, &entity.Patronymic, &entity.Age, &entity.Seniority, &entity.BuildingOrganizationID, &entity.Position.ID, &entity.Position.Name); err != nil {
 			return nil, err
 		}
 		engineerWorkers = append(engineerWorkers, &entity)
@@ -95,7 +95,7 @@ func (repo *engineerWorkerRepository) FindByConstructionManagement(ctx context.C
 	var engineerWorkers []*model.EngineerWorker
 
 	rows, err := repo.db.QueryContext(ctx, `
-		SELECT ew.id, ew.name, ew.surname, ew.patronymic, ew.age, ew.seniority, ew.building_organization_id, ew.skill_level, ep.id, ep.name 
+		SELECT ew.id, ew.name, ew.surname, ew.patronymic, ew.age, ew.seniority, ew.building_organization_id, ep.id, ep.name 
 		FROM construction_management AS cm
         	JOIN building_site AS bs ON cm.id = bs.management_id
         	JOIN construction_project AS cp ON bs.id = cp.building_site_id
@@ -111,7 +111,7 @@ func (repo *engineerWorkerRepository) FindByConstructionManagement(ctx context.C
 
 	for rows.Next() {
 		var entity model.EngineerWorker
-		if err := rows.Scan(&entity.ID, &entity.Name, &entity.Surname, &entity.Patronymic, &entity.Age, &entity.Seniority, &entity.BuildingOrganizationID, &entity.SkillLevel, &entity.Position.ID, &entity.Position.Name); err != nil {
+		if err := rows.Scan(&entity.ID, &entity.Name, &entity.Surname, &entity.Patronymic, &entity.Age, &entity.Seniority, &entity.BuildingOrganizationID, &entity.Position.ID, &entity.Position.Name); err != nil {
 			return nil, err
 		}
 	}
