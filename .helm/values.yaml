@@ -1,0 +1,40 @@
+# "---" must be set from commandline
+
+images:
+  repository:
+    username: ---
+    password: ---
+    registry: docker.io
+
+  system:
+    repository: ykhdr/construction-system
+    tag: latest
+  report:
+    repository: ykhdr/construction-report
+    tag: latest
+  front:
+    repository: ykhdr/construction-front
+    tag: latest
+
+replicaCount: 1
+
+service:
+  system:
+    port: 8080
+  report:
+    port: 8080
+  front:
+    port: 80
+  type: ClusterIP
+
+secrets:
+  database:
+    user: ---
+    password: ---
+    host: ---
+    port: ---
+    name: ---
+
+ingress:
+  class: ns-ingress
+  externalHost: construction.ru

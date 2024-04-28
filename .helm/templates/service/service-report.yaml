@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Release.Name}}-report
+  labels:
+    app.kubernetes.io/name: {{.Release.Name}}-report
+spec:
+  selector:
+    app.kubernetes.io/name: {{.Release.Name}}-report
+  type: {{.Values.service.type}}
+  ports:
+    - port: {{.Values.service.report.port}}
+      targetPort: 80
+      name: http

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{.Release.Name}}
+  labels:
+    app.kubernetes.io/name: {{.Release.Name}}-ingress
+    app.kubernetes.io/instance: {{.Release.Name}}
+  annotations:
+    kubernetes.io/ingress.class: {{.Values.ingress.class}}
+spec:
+  rules:
+    - host: {{.Values.ingress.externalHost}}
+    - http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: {{.Release.Name}}-system
+                port:
+                  number: 8080
+            pathType: ImplementationSpecific

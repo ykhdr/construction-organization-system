@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-report
+  labels:
+    app.kubernetes.io/name: {{.Release.Name}}-report
+    app.kubernetes.io/instance: {{.Release.Name}}
+spec:
+  replicas: {{.Values.replicaCount}}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{.Release.Name}}-report
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{.Release.Name}}-report
+    spec:
+      containers:
+        - name: report
+          image: {{.Values.images.report.repository}}:{{.Values.images.system.tag}}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: databaseHost
+                  name: database-auth-{{.Release.Name}}
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: databaseUser
+                  name: database-auth-{{.Release.Name}}
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: databasePort
+                  name: database-auth-{{.Release.Name}}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: databasePassword
+                  name: database-auth-{{.Release.Name}}
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: databaseName
+                  name: database-auth-{{.Release.Name}}
+      imagePullSecrets:
+        - name: docker-auth-{{.Release.Name}}

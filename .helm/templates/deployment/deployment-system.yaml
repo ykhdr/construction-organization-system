@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-system
+  labels:
+    app.kubernetes.io/name: {{.Release.Name}}-system
+    app.kubernetes.io/instance: {{.Release.Name}}
+spec:
+  replicas: {{.Values.replicaCount}}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{.Release.Name}}-system
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{.Release.Name}}-system
+    spec:
+      containers:
+        - name: system
+          image: {{.Values.images.system.repository}}:{{.Values.images.system.tag}}
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: docker-auth-{{.Release.Name}}
