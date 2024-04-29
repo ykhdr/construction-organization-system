@@ -1,3 +1,6 @@
 [submodule "construction-organization-report"]
 	path = construction-organization-report
 	url = https://github.com/ykhdr/construction-organization-report
+[submodule "construction-organization-front"]
+	path = construction-organization-front
+	url = https://github.com/ykhdr/construction-organization-front
