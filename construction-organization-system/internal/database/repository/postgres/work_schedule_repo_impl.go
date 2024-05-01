@@ -75,6 +75,37 @@ func (repo *workScheduleRepository) FindByProject(ctx context.Context, projectID
 		if err := rows.Scan(&entity.ID, &entity.ConstructionTeamID, &entity.WorkType.ID, &entity.WorkType.Name, &entity.PlanStartDate, &entity.PlanEndDate, &entity.FactStartDate, &entity.FactEndDate, &entity.PlanOrder, &entity.FactOrder, &entity.ProjectID); err != nil {
 			return nil, err
 		}
+		workSchedules = append(workSchedules, &entity)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return workSchedules, nil
+}
+
+func (repo *workScheduleRepository) FindAll(ctx context.Context) ([]*model.WorkSchedule, error) {
+	var workSchedules []*model.WorkSchedule
+
+	rows, err := repo.db.QueryContext(ctx, `
+		SELECT ws.id, ws.construction_team_id, wt.id,wt.name, ws.plan_start_date, ws.plan_end_date, ws.fact_start_date, ws.fact_end_date, ws.plan_order, ws.fact_order, ws.project_id 
+		FROM work_schedule AS ws
+			JOIN work_type AS wt ON ws.work_type_id = wt.id
+		WHERE project_id != 0
+		`)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var entity model.WorkSchedule
+		if err := rows.Scan(&entity.ID, &entity.ConstructionTeamID, &entity.WorkType.ID, &entity.WorkType.Name, &entity.PlanStartDate, &entity.PlanEndDate, &entity.FactStartDate, &entity.FactEndDate, &entity.PlanOrder, &entity.FactOrder, &entity.ProjectID); err != nil {
+			return nil, err
+		}
+		workSchedules = append(workSchedules, &entity)
 	}
 
 	if err := rows.Err(); err != nil {

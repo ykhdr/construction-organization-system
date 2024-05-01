@@ -11,4 +11,5 @@ type WorkScheduleRepository interface {
 	Update(ctx context.Context, entity model.WorkSchedule) error
 	Delete(ctx context.Context, id int) error
 	FindByProject(ctx context.Context, projectID int) ([]*model.WorkSchedule, error)
+	FindAll(ctx context.Context) ([]*model.WorkSchedule, error)
 }
