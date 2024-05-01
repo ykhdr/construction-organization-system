@@ -93,7 +93,7 @@ func (s *ConstructionProjectService) GetProjects(workTypeID int, startDate, endD
 	var err error
 	ctx := context.Background()
 
-	if workTypeID == 0 {
+	if workTypeID != 0 {
 		projects, err = s.constructionProjectRepository.FindByWorkTypeWithPeriod(ctx, workTypeID, startDate, endDate)
 	} else {
 		projects, err = s.constructionProjectRepository.FindAll(context.Background())
@@ -248,4 +248,13 @@ func (s *ConstructionProjectService) DeleteBridge(projectId int) error {
 	}
 
 	return nil
+}
+
+func (s *ConstructionProjectService) GetProject(projectId int) (*model.ConstructionProject, error) {
+	project, err := s.constructionProjectRepository.Find(context.Background(), projectId)
+	if err != nil {
+		return nil, err
+	}
+
+	return project, nil
 }
