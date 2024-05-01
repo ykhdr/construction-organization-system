@@ -4,6 +4,7 @@ import (
 	"construction-organization-system/internal/api/handlers"
 	"construction-organization-system/internal/database/repository/postgres"
 	"construction-organization-system/internal/log"
+	"construction-organization-system/internal/net"
 	"construction-organization-system/internal/service"
 	"database/sql"
 	"github.com/gorilla/mux"
@@ -99,9 +100,12 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 	reportHandlers := handlers.NewReportHandlers(reportService)
 	workScheduleHandlers := handlers.NewWorkScheduleHandlers(workScheduleService)
 
+	router := mux.NewRouter()
+	router.Use(net.LoggerMiddleware)
+
 	return &Server{
 		listenAddr:                     listenAddr,
-		router:                         &mux.Router{},
+		router:                         router,
 		buildingOrganizationHandlers:   buildingOrganizationHandlers,
 		buildingSiteHandlers:           buildingSiteHandlers,
 		constructionContractHandlers:   constructionContractHandlers,
@@ -170,7 +174,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/construction_project/{id:[0-9]+}/schedules", s.constructionProjectHandlers.GetWorkSchedules).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}/estimate", s.constructionProjectHandlers.GetEstimate).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}/construction_teams", s.constructionProjectHandlers.GetConstructionTeams).Methods("GET")
-	api.HandleFunc("/construction_project/{id:[0-9]+}/machines?start_date={start_date}&end_date={end_date}", s.constructionProjectHandlers.GetMachines).Methods("GET")
+	api.HandleFunc("/construction_project/{id:[0-9]+}/machines", s.constructionProjectHandlers.GetMachines).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}/reports", s.constructionProjectHandlers.GetReports).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}/exceeded_deadlines_works", s.constructionProjectHandlers.GetExceededDeadlinesWorks).Methods("GET")
 
