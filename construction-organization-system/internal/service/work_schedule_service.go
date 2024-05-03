@@ -4,6 +4,8 @@ import (
 	"construction-organization-system/internal/database/repository"
 	"construction-organization-system/internal/model"
 	"context"
+	"encoding/json"
+	"io"
 )
 
 type WorkScheduleService struct {
@@ -21,4 +23,19 @@ func (s *WorkScheduleService) GetList() ([]*model.WorkSchedule, error) {
 	}
 
 	return schedules, nil
+}
+
+func (s *WorkScheduleService) Create(body io.ReadCloser) error {
+	var workSchedule model.WorkSchedule
+	err := json.NewDecoder(body).Decode(&workSchedule)
+	if err != nil {
+		return err
+	}
+
+	id, err := s.workScheduleRepository.Save(context.Background(), workSchedule)
+	if err != nil {
+		return err
+	}
+	workSchedule.ID = id
+	return nil
 }

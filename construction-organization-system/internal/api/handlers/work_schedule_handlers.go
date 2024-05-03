@@ -19,7 +19,12 @@ func (h *WorkScheduleHandlers) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *WorkScheduleHandlers) Create(w http.ResponseWriter, r *http.Request) {
-
+	err := h.workScheduleService.Create(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (h *WorkScheduleHandlers) Update(w http.ResponseWriter, r *http.Request) {
