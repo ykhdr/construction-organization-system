@@ -114,6 +114,8 @@ func (repo *engineerWorkerRepository) FindByConstructionManagement(ctx context.C
 		if err := rows.Scan(&entity.ID, &entity.Name, &entity.Surname, &entity.Patronymic, &entity.Age, &entity.Seniority, &entity.BuildingOrganizationID, &entity.Position.ID, &entity.Position.Name); err != nil {
 			return nil, err
 		}
+
+		engineerWorkers = append(engineerWorkers, &entity)
 	}
 
 	if err = rows.Err(); err != nil {
