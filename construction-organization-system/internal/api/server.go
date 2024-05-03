@@ -29,6 +29,7 @@ type Server struct {
 	estimateHandlers               *handlers.EstimateHandlers
 	reportHandlers                 *handlers.ReportHandlers
 	workScheduleHandlers           *handlers.WorkScheduleHandlers
+	workTypeHandlers               *handlers.WorkTypeHandlers
 }
 
 func NewServer(listenAddr string, db *sql.DB) *Server {
@@ -83,6 +84,7 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 	estimateService := service.NewEstimateService(estimateRepository, materialRepository)
 	reportService := service.NewReportService(reportRepository)
 	workScheduleService := service.NewWorkScheduleService(workScheduleRepository)
+	workTypeService := service.NewWorkTypeService(workTypeRepository)
 
 	buildingOrganizationHandlers := handlers.NewBuildingOrganizationHandlers(buildingOrganizationService)
 	buildingSiteHandlers := handlers.NewBuildingSiteHandlers(buildingSiteService, engineerWorkerService)
@@ -99,6 +101,7 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 	estimateHandlers := handlers.NewEstimateHandlers(estimateService)
 	reportHandlers := handlers.NewReportHandlers(reportService)
 	workScheduleHandlers := handlers.NewWorkScheduleHandlers(workScheduleService)
+	workTypeHandlers := handlers.NewWorkTypeHandlers(workTypeService)
 
 	router := mux.NewRouter()
 	router.Use(net.LoggerMiddleware)
@@ -121,6 +124,7 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 		estimateHandlers:               estimateHandlers,
 		reportHandlers:                 reportHandlers,
 		workScheduleHandlers:           workScheduleHandlers,
+		workTypeHandlers:               workTypeHandlers,
 	}
 
 }
@@ -178,7 +182,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/construction_project/{id:[0-9]+}/reports", s.constructionProjectHandlers.GetReports).Methods("GET")
 	api.HandleFunc("/construction_project/{id:[0-9]+}/exceeded_deadlines_works", s.constructionProjectHandlers.GetExceededDeadlinesWorks).Methods("GET")
 
-	api.HandleFunc("/construction_team?work_type={work_type&start_date={start_date}&end_date={end_date}", s.constructionTeamHandlers.GetList).Methods("GET")
+	api.HandleFunc("/construction_team", s.constructionTeamHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Get).Methods("GET")
 	api.HandleFunc("/construction_team", s.constructionTeamHandlers.Create).Methods("POST")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Update).Methods("PUT")
@@ -252,6 +256,8 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/bridge", s.constructionProjectHandlers.CreateBridge).Methods("POST")
 	api.HandleFunc("/bridge/{id:[0-9]+}", s.constructionProjectHandlers.UpdateBridge).Methods("PUT")
 	api.HandleFunc("/bridge/{id:[0-9]+}", s.constructionProjectHandlers.DeleteBridge).Methods("DELETE")
+
+	api.HandleFunc("/work_type", s.workTypeHandlers.GetList).Methods("GET")
 }
 
 func (s *Server) Start() {
