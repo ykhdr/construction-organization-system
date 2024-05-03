@@ -12,4 +12,5 @@ type EngineerWorkerRepository interface {
 	Delete(ctx context.Context, id int) error
 	FindByBuildingSite(ctx context.Context, buildingSiteId int) ([]*model.EngineerWorker, error)
 	FindByConstructionManagement(ctx context.Context, constructionManagementId int) ([]*model.EngineerWorker, error)
+	FindAll(ctx context.Context) ([]*model.EngineerWorker, error)
 }

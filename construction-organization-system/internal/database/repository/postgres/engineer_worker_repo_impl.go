@@ -124,3 +124,33 @@ func (repo *engineerWorkerRepository) FindByConstructionManagement(ctx context.C
 
 	return engineerWorkers, nil
 }
+
+func (repo *engineerWorkerRepository) FindAll(ctx context.Context) ([]*model.EngineerWorker, error) {
+	var engineerWorkers []*model.EngineerWorker
+
+	rows, err := repo.db.QueryContext(ctx, `
+		SELECT ew.id, ew.name, ew.surname, ew.patronymic, ew.age, ew.seniority, ew.building_organization_id, ep.id, ep.name 
+		FROM engineer_worker AS ew
+		JOIN engineer_position AS ep ON ep.id = ew.position_id
+		WHERE ew.id != 0
+	`)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var entity model.EngineerWorker
+		err := rows.Scan(&entity.ID, &entity.Name, &entity.Surname, &entity.Patronymic, &entity.Age, &entity.Seniority, &entity.BuildingOrganizationID, &entity.Position.ID, &entity.Position.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		engineerWorkers = append(engineerWorkers, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return engineerWorkers, nil
+}

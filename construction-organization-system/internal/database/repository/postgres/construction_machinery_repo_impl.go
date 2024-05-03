@@ -155,3 +155,32 @@ func (repo *constructionMachineryRepository) GetByProjectWithPeriod(ctx context.
 
 	return result, nil
 }
+
+func (repo *constructionMachineryRepository) FindAll(ctx context.Context) ([]*model.ConstructionMachinery, error) {
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT id, name, project_id
+	FROM construction_machinery
+	WHERE id != 0
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []*model.ConstructionMachinery
+	for rows.Next() {
+		var entity model.ConstructionMachinery
+		err = rows.Scan(&entity.ID, &entity.Name, &entity.ProjectID)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, &entity)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}

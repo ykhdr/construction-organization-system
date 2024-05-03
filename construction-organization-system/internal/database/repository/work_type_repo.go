@@ -12,4 +12,5 @@ type WorkTypeRepository interface {
 	Delete(ctx context.Context, id int) error
 	FindByProjectWithExceededWorkDeadlines(ctx context.Context, projectID int) ([]*model.WorkType, error)
 	FindByTeamWithPeriod(ctx context.Context, teamId int, startDate string, endDate string) ([]*model.WorkType, error)
+	FindAll(ctx context.Context) ([]*model.WorkType, error)
 }

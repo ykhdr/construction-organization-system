@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"construction-organization-system/internal/service"
+	"encoding/json"
 	"net/http"
 )
 
@@ -30,5 +31,15 @@ func (h *ConstructionMachineryHandlers) Delete(w http.ResponseWriter, r *http.Re
 }
 
 func (h *ConstructionMachineryHandlers) GetList(w http.ResponseWriter, r *http.Request) {
+	machinery, err := h.constructionMachineryService.GetList()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(machinery)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }

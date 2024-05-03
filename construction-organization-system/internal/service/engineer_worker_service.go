@@ -25,3 +25,12 @@ func (s *EngineerWorkerService) GetById(id int) (*model.EngineerWorker, error) {
 
 	return worker, nil
 }
+
+func (s *EngineerWorkerService) GetList() ([]*model.EngineerWorker, error) {
+	workers, err := s.engineerWorkerRepository.FindAll(context.Background())
+	if err != nil {
+		log.Logger.WithError(err).Errorln("Error on getting engineer worker list")
+		return workers, err
+	}
+	return workers, nil
+}

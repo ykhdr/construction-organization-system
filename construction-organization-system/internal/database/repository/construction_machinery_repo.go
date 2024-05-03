@@ -13,4 +13,5 @@ type ConstructionMachineryRepository interface {
 	GetByManagement(ctx context.Context, managementId int) ([]*model.ConstructionMachinery, error)
 	GetByProject(ctx context.Context, projectID int) ([]*model.ConstructionMachinery, error)
 	GetByProjectWithPeriod(ctx context.Context, projectID int, startDate string, endDate string) ([]*model.ConstructionMachinery, error)
+	FindAll(ctx context.Context) ([]*model.ConstructionMachinery, error)
 }

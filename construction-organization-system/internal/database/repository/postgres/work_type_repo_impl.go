@@ -114,3 +114,29 @@ func (repo *workTypeRepository) FindByTeamWithPeriod(ctx context.Context, teamId
 
 	return entities, nil
 }
+
+func (repo *workTypeRepository) FindAll(ctx context.Context) ([]*model.WorkType, error) {
+	var entities []*model.WorkType
+	rows, err := repo.db.QueryContext(ctx, `
+	SELECT id, name 
+	FROM work_type
+	WHERE id != 0
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var entity model.WorkType
+		if err := rows.Scan(&entity.ID, &entity.Name); err != nil {
+			return nil, err
+		}
+		entities = append(entities, &entity)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return entities, nil
+}
