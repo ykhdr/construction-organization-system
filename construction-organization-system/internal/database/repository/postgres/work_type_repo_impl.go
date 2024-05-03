@@ -91,8 +91,8 @@ func (repo *workTypeRepository) FindByTeamWithPeriod(ctx context.Context, teamId
 	WHERE ws.id != 0
 		AND wt.id != 0 
 		AND ws.construction_team_id = $1
-		AND ($2 = '' OR ws.fact_start_date > $2)
-		AND ($3 = '' OR  ws.fact_end_date < $3)
+		AND ($2 = '' OR ws.fact_start_date > to_date($2, 'YYYY-MM-DD'))
+		AND ($3 = '' OR  ws.fact_end_date < to_date($3, 'YYYY-MM-DD'))
 	`, teamId, startDate, endDate)
 
 	if err != nil {

@@ -55,14 +55,19 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 	materialRepository := postgres.NewMaterialRepository(db)
 
 	buildingOrganizationService := service.NewBuildingOrganizationService(buildingOrganizationRepository)
-	buildingSiteService := service.NewBuildingSiteService(buildingSiteRepository, engineerWorkerRepository)
+	buildingSiteService := service.NewBuildingSiteService(
+		buildingSiteRepository,
+		engineerWorkerRepository,
+		constructionProjectRepository,
+	)
 	constructionContractService := service.NewConstructionContractService(constructionContractRepository)
 	constructionMachineryService := service.NewConstructionMachineryService(constructionMachineryRepository)
 	constructionManagementService := service.NewConstructionManagementService(
 		constructionManagementRepository,
 		engineerWorkerRepository,
 		constructionProjectRepository,
-		constructionMachineryRepository)
+		constructionMachineryRepository,
+	)
 	constructionProjectService := service.NewConstructionProjectService(
 		constructionProjectRepository,
 		workScheduleRepository,
@@ -75,7 +80,11 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 		apartmentHouseRepository,
 		bridgeRepository,
 	)
-	constructionTeamService := service.NewConstructionTeamService(constructionTeamRepository)
+	constructionTeamService := service.NewConstructionTeamService(
+		constructionTeamRepository,
+		constructionWorkerRepository,
+		workTypeRepository,
+	)
 	constructionWorkerService := service.NewConstructionWorkerService(constructionWorkerRepository)
 	customerOrganizationService := service.NewCustomerOrganizationService(customerOrganizationRepository)
 	employeeService := service.NewEmployeeService(employeeRepository)
@@ -188,7 +197,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Update).Methods("PUT")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.Delete).Methods("DELETE")
 	api.HandleFunc("/construction_team/{id:[0-9]+}", s.constructionTeamHandlers.GetWorkers).Methods("GET")
-	api.HandleFunc("/construction_team/{id:[0-9]+}/work_types?start_date={start_date}&end_date={end_date}", s.constructionTeamHandlers.GetWorkTypes).Methods("GET")
+	api.HandleFunc("/construction_team/{id:[0-9]+}/work_types", s.constructionTeamHandlers.GetWorkTypes).Methods("GET")
 
 	api.HandleFunc("/construction_worker", s.constructionWorkerHandlers.GetList).Methods("GET")
 	api.HandleFunc("/construction_worker/{id:[0-9]+}", s.constructionWorkerHandlers.Get).Methods("GET")
@@ -257,7 +266,7 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/bridge/{id:[0-9]+}", s.constructionProjectHandlers.UpdateBridge).Methods("PUT")
 	api.HandleFunc("/bridge/{id:[0-9]+}", s.constructionProjectHandlers.DeleteBridge).Methods("DELETE")
 
-	api.HandleFunc("/work_type", s.workTypeHandlers.GetList).Methods("GET")
+	api.HandleFunc("/work_types", s.workTypeHandlers.GetList).Methods("GET")
 }
 
 func (s *Server) Start() {

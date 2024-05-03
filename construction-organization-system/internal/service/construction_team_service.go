@@ -12,6 +12,10 @@ type ConstructionTeamService struct {
 	workTypeRepository           repository.WorkTypeRepository
 }
 
+func NewConstructionTeamService(constructionTeamRepository repository.ConstructionTeamRepository, constructionWorkerRepository repository.ConstructionWorkerRepository, workTypeRepository repository.WorkTypeRepository) *ConstructionTeamService {
+	return &ConstructionTeamService{constructionTeamRepository: constructionTeamRepository, constructionWorkerRepository: constructionWorkerRepository, workTypeRepository: workTypeRepository}
+}
+
 func (s *ConstructionTeamService) GetWorkers(teamId int) ([]*model.ConstructionWorker, error) {
 	workers, err := s.constructionWorkerRepository.FindByTeam(context.Background(), teamId)
 	if err != nil {
@@ -38,6 +42,11 @@ func (s *ConstructionTeamService) GetTeams(workTypeId int, startDate string, end
 	return teams, nil
 }
 
-func NewConstructionTeamService(repo repository.ConstructionTeamRepository) *ConstructionTeamService {
-	return &ConstructionTeamService{constructionTeamRepository: repo}
+func (s *ConstructionTeamService) Get(teamId int) (*model.ConstructionTeam, error) {
+	team, err := s.constructionTeamRepository.Find(context.Background(), teamId)
+
+	if err != nil {
+		return nil, err
+	}
+	return team, nil
 }

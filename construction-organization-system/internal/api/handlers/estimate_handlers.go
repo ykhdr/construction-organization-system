@@ -45,14 +45,14 @@ func (h *EstimateHandlers) GetExceededUsageMaterials(w http.ResponseWriter, r *h
 		return
 	}
 
-	estimate, err := h.estimateService.GetExceededUsageMaterials(estimateID)
+	materials, err := h.estimateService.GetExceededUsageMaterials(estimateID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(estimate)
+	err = json.NewEncoder(w).Encode(materials)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

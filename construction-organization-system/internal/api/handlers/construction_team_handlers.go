@@ -18,7 +18,25 @@ func NewConstructionTeamHandlers(service *service.ConstructionTeamService) *Cons
 }
 
 func (h *ConstructionTeamHandlers) Get(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
 
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Invalid id format. Use integer value.", http.StatusBadRequest)
+		return
+	}
+
+	team, err := h.constructionTeamService.Get(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(team)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (h *ConstructionTeamHandlers) Create(w http.ResponseWriter, r *http.Request) {

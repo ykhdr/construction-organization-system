@@ -13,8 +13,8 @@ type BuildingSiteService struct {
 	projectRepository        repository.ConstructionProjectRepository
 }
 
-func NewBuildingSiteService(buildingSiteRepository repository.BuildingSiteRepository, engineerWorkerRepo repository.EngineerWorkerRepository) *BuildingSiteService {
-	return &BuildingSiteService{buildingSiteRepository: buildingSiteRepository, engineerWorkerRepository: engineerWorkerRepo}
+func NewBuildingSiteService(buildingSiteRepository repository.BuildingSiteRepository, engineerWorkerRepo repository.EngineerWorkerRepository, projectRepository repository.ConstructionProjectRepository) *BuildingSiteService {
+	return &BuildingSiteService{buildingSiteRepository: buildingSiteRepository, engineerWorkerRepository: engineerWorkerRepo, projectRepository: projectRepository}
 }
 
 func (s *BuildingSiteService) GetById(id int) (*model.BuildingSite, error) {
