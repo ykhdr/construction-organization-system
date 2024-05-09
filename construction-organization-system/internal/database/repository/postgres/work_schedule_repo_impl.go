@@ -16,13 +16,13 @@ func NewWorkScheduleRepository(db *sql.DB) repository.WorkScheduleRepository {
 }
 
 func (repo *workScheduleRepository) Save(ctx context.Context, entity model.WorkSchedule) (int, error) {
-	var newId int
-	err := repo.db.QueryRowContext(ctx, "INSERT INTO work_schedule(construction_team_id, work_type_id, plan_start_date, plan_end_date, fact_start_date, fact_end_date, plan_order, fact_order, project_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-		entity.ConstructionTeamID, entity.WorkType.ID, entity.PlanStartDate, entity.PlanEndDate, entity.FactStartDate, entity.FactEndDate, entity.PlanOrder, entity.FactOrder, entity.ProjectID).Scan(&newId)
+	_, err := repo.db.ExecContext(ctx, "INSERT INTO work_schedule(construction_team_id, work_type_id, plan_start_date, plan_end_date, fact_start_date, fact_end_date, plan_order, fact_order, project_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+		entity.ConstructionTeamID, entity.WorkType.ID, entity.PlanStartDate, entity.PlanEndDate, entity.FactStartDate, entity.FactEndDate, entity.PlanOrder, entity.FactOrder, entity.ProjectID)
 	if err != nil {
 		return 0, err
 	}
-	return newId, nil
+
+	return 1, nil
 }
 
 func (repo *workScheduleRepository) Find(ctx context.Context, id int) (*model.WorkSchedule, error) {

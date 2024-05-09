@@ -16,9 +16,10 @@ func NewConstructionTeamRepository(db *sql.DB) repository.ConstructionTeamReposi
 }
 
 func (repo *constructionTeamRepository) Save(ctx context.Context, entity model.ConstructionTeam) (int, error) {
-	var newId int
-	err := repo.db.QueryRowContext(ctx, "INSERT INTO construction_team(project_id) VALUES ($1)",
-		entity.ProjectID).Scan(&newId)
+	var newId = 1
+	_, err := repo.db.ExecContext(ctx, "INSERT INTO construction_team(project_id, name) VALUES ($1, $2) RETURNING id",
+		entity.ProjectID, entity.Name)
+
 	if err != nil {
 		return 0, err
 	}

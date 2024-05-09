@@ -40,6 +40,12 @@ func (h *ConstructionTeamHandlers) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ConstructionTeamHandlers) Create(w http.ResponseWriter, r *http.Request) {
+	err := h.constructionTeamService.Create(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
 
 }
 
@@ -49,6 +55,20 @@ func (h *ConstructionTeamHandlers) Update(w http.ResponseWriter, r *http.Request
 
 func (h *ConstructionTeamHandlers) Delete(w http.ResponseWriter, r *http.Request) {
 
+	vars := mux.Vars(r)
+
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Invalid id format. Use integer value.", http.StatusBadRequest)
+		return
+	}
+
+	err = h.constructionTeamService.Delete(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *ConstructionTeamHandlers) GetList(w http.ResponseWriter, r *http.Request) {

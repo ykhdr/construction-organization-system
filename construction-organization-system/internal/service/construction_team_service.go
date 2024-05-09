@@ -4,6 +4,8 @@ import (
 	"construction-organization-system/internal/database/repository"
 	"construction-organization-system/internal/model"
 	"context"
+	"encoding/json"
+	"io"
 )
 
 type ConstructionTeamService struct {
@@ -49,4 +51,23 @@ func (s *ConstructionTeamService) Get(teamId int) (*model.ConstructionTeam, erro
 		return nil, err
 	}
 	return team, nil
+}
+
+func (s *ConstructionTeamService) Create(body io.ReadCloser) error {
+	var team model.ConstructionTeam
+
+	err := json.NewDecoder(body).Decode(&team)
+	if err != nil {
+		return err
+	}
+
+	_, err = s.constructionTeamRepository.Save(context.Background(), team)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *ConstructionTeamService) Delete(id int) error {
+	return s.constructionTeamRepository.Delete(context.Background(), id)
 }
