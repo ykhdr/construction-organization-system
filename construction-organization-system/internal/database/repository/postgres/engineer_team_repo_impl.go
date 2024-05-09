@@ -17,8 +17,8 @@ func NewEngineerTeamRepository(db *sql.DB) repository.EngineerTeamRepository {
 
 func (repo *engineerTeamRepository) Save(ctx context.Context, entity model.EngineerTeam) (int, error) {
 	var newId int
-	err := repo.db.QueryRowContext(ctx, "INSERT INTO engineer_team(name, project_id) VALUES ($1, $2)",
-		entity.Name, entity.ProjectID).Scan(&newId)
+	err := repo.db.QueryRowContext(ctx, "INSERT INTO engineer_team(name, project_id, type) VALUES ($1, $2)",
+		entity.Name, entity.ProjectID, entity.Type).Scan(&newId)
 	if err != nil {
 		return 0, err
 	}
@@ -27,8 +27,8 @@ func (repo *engineerTeamRepository) Save(ctx context.Context, entity model.Engin
 
 func (repo *engineerTeamRepository) Find(ctx context.Context, id int) (*model.EngineerTeam, error) {
 	var entity model.EngineerTeam
-	err := repo.db.QueryRowContext(ctx, "SELECT id, name, project_id FROM engineer_team WHERE id = $1", id).
-		Scan(&entity.ID, &entity.Name, &entity.ProjectID)
+	err := repo.db.QueryRowContext(ctx, "SELECT id, name, project_id, type FROM engineer_team WHERE id = $1 and id != 0", id).
+		Scan(&entity.ID, &entity.Name, &entity.ProjectID, &entity.Type)
 	if err != nil {
 		return nil, err
 	}
@@ -50,4 +50,21 @@ func (repo *engineerTeamRepository) Delete(ctx context.Context, id int) error {
 		return err
 	}
 	return nil
+}
+
+func (repo *engineerTeamRepository) FindAll(ctx context.Context) ([]*model.EngineerTeam, error) {
+	var entities []*model.EngineerTeam
+	rows, err := repo.db.QueryContext(ctx, "SELECT id, name, project_id, type FROM engineer_team WHERE id != 0")
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var entity model.EngineerTeam
+		err := rows.Scan(&entity.ID, &entity.Name, &entity.ProjectID, &entity.Type)
+		if err != nil {
+			return nil, err
+		}
+		entities = append(entities, &entity)
+	}
+	return entities, nil
 }
