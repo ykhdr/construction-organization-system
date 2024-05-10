@@ -32,7 +32,7 @@ func main() {
 	log.Logger.Infoln("Successful database connection")
 
 	log.Logger.Infoln("Migrate database...")
-	err = database.Migrate(newDB, "db/migrations")
+	err = database.Migrate(newDB, "/db/migrations")
 	if err != nil {
 		log.Logger.WithError(err).Errorln("Error on migrating")
 		return

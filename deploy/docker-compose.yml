@@ -1,0 +1,53 @@
+version: 'v3'
+networks:
+  app:
+    driver: bridge
+
+services:
+  front:
+    build: ./../construction-organization-front
+    container_name: front
+    environment:
+      - BACKEND_URL=nginx:80
+    ports:
+      - 80:80
+    networks:
+      - app
+
+  system:
+    build: ./../construction-organization-system
+    container_name: system
+    volumes:
+      - ../db:/db
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+    networks:
+      - app
+
+  report:
+    build: ./../construction-organization-report
+    container_name: report
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+    networks:
+      - app
+
+  nginx:
+    image: nginx:1.21
+    container_name: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - app
+    depends_on:
+      - front
+      - system
+      - report
