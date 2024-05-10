@@ -65,7 +65,6 @@ func (h *ConstructionTeamHandlers) Update(w http.ResponseWriter, r *http.Request
 }
 
 func (h *ConstructionTeamHandlers) Delete(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 
 	id, err := strconv.Atoi(vars["id"])
