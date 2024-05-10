@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"construction-organization-system/internal/log"
 	"construction-organization-system/internal/service"
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -41,12 +42,14 @@ func (h *BuildingOrganizationHandlers) GetProjects(w http.ResponseWriter, r *htt
 
 	organizationID, err := strconv.Atoi(vars["id"])
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error get organization id")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	projects, err := h.buildingOrganizationService.GetProjects(organizationID)
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error getting projects")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

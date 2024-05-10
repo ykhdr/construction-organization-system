@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"construction-organization-system/internal/log"
 	"construction-organization-system/internal/service"
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -21,12 +22,14 @@ func (h *EngineerTeamHandlers) Get(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error get engineer team id")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	team, err := h.engineerTeamService.Get(id)
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error getting engineer team")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -54,12 +57,14 @@ func (h *EngineerTeamHandlers) GetList(w http.ResponseWriter, r *http.Request) {
 
 	teams, err := h.engineerTeamService.GetList()
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error getting engineer team list")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(teams)
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error encoding engineer team list")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

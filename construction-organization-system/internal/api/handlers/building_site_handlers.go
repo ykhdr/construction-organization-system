@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"construction-organization-system/internal/log"
 	"construction-organization-system/internal/service"
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -21,12 +22,14 @@ func (h *BuildingSiteHandlers) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error get building site id")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	buildingSite, err := h.buildingSiteService.GetById(id)
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error getting building site")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

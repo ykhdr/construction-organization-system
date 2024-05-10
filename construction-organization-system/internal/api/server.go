@@ -141,6 +141,8 @@ func NewServer(listenAddr string, db *sql.DB) *Server {
 func (s *Server) InitializeRoutes() {
 	api := s.router.PathPrefix("/api/v1").Subrouter()
 
+	log.Logger.Infoln("Initializing routes...")
+
 	api.HandleFunc("/building_organization", s.buildingOrganizationHandlers.GetList).Methods("GET")
 	api.HandleFunc("/building_organization/{id:[0-9]+}", s.buildingOrganizationHandlers.Get).Methods("GET")
 	api.HandleFunc("/building_organization", s.buildingOrganizationHandlers.Create).Methods("POST")
@@ -267,6 +269,8 @@ func (s *Server) InitializeRoutes() {
 	api.HandleFunc("/bridge/{id:[0-9]+}", s.constructionProjectHandlers.DeleteBridge).Methods("DELETE")
 
 	api.HandleFunc("/work_types", s.workTypeHandlers.GetList).Methods("GET")
+
+	log.Logger.Infoln("Routes initialized")
 }
 
 func (s *Server) Start() {

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"construction-organization-system/internal/log"
 	"construction-organization-system/internal/service"
 	"encoding/json"
 	"net/http"
@@ -33,6 +34,7 @@ func (h *ConstructionMachineryHandlers) Delete(w http.ResponseWriter, r *http.Re
 func (h *ConstructionMachineryHandlers) GetList(w http.ResponseWriter, r *http.Request) {
 	machinery, err := h.constructionMachineryService.GetList()
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error getting machinery")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

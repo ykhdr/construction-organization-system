@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"construction-organization-system/internal/log"
 	"construction-organization-system/internal/service"
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -21,12 +22,14 @@ func (h *EngineerWorkerHandlers) Get(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error get engineer worker id")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	worker, err := h.engineerWorkerService.GetById(id)
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error getting engineer worker")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -34,6 +37,7 @@ func (h *EngineerWorkerHandlers) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(worker)
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error getting engineer worker")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -54,6 +58,7 @@ func (h *EngineerWorkerHandlers) GetList(w http.ResponseWriter, r *http.Request)
 
 	workers, err := h.engineerWorkerService.GetList()
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error getting engineer worker list")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -61,6 +66,7 @@ func (h *EngineerWorkerHandlers) GetList(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(workers)
 	if err != nil {
+		log.Logger.WithError(err).Errorln("Error getting engineer worker list")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
