@@ -55,7 +55,13 @@ func (h *ConstructionTeamHandlers) Create(w http.ResponseWriter, r *http.Request
 }
 
 func (h *ConstructionTeamHandlers) Update(w http.ResponseWriter, r *http.Request) {
-
+	err := h.constructionTeamService.Update(r.Body)
+	if err != nil {
+		log.Logger.WithError(err).Errorln("Error updating team")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *ConstructionTeamHandlers) Delete(w http.ResponseWriter, r *http.Request) {

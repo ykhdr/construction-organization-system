@@ -37,8 +37,8 @@ func (repo *constructionTeamRepository) Find(ctx context.Context, id int) (*mode
 }
 
 func (repo *constructionTeamRepository) Update(ctx context.Context, entity model.ConstructionTeam) error {
-	_, err := repo.db.ExecContext(ctx, "UPDATE construction_team SET project_id = $1 WHERE id = $2",
-		entity.ProjectID, entity.ID)
+	_, err := repo.db.ExecContext(ctx, "UPDATE construction_team SET project_id = $1, name = $2 WHERE id = $3",
+		entity.ProjectID, entity.Name, entity.ID)
 	if err != nil {
 		return err
 	}

@@ -71,3 +71,12 @@ func (s *ConstructionTeamService) Create(body io.ReadCloser) error {
 func (s *ConstructionTeamService) Delete(id int) error {
 	return s.constructionTeamRepository.Delete(context.Background(), id)
 }
+
+func (s *ConstructionTeamService) Update(body io.ReadCloser) error {
+	var team model.ConstructionTeam
+	err := json.NewDecoder(body).Decode(&team)
+	if err != nil {
+		return err
+	}
+	return s.constructionTeamRepository.Update(context.Background(), team)
+}
