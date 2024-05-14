@@ -1,0 +1,15 @@
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (51, 344);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (52, 345);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (53, 346);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (54, 347);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (55, 348);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (56, 349);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (57, 350);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (58, 351);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (59, 352);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (60, 353);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (61, 354);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (62, 355);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (63, 356);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (64, 357);
+INSERT INTO y_khudorozhkov.engineer_manager (worker_id, team_id) VALUES (65, 358);

@@ -1,0 +1,15 @@
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (152, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (153, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (154, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (155, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (156, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (157, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (158, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (159, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (160, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (161, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (162, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (163, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (164, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (165, '2024-04-26');
+INSERT INTO y_khudorozhkov.estimate (id, last_update_date) VALUES (166, '2024-04-26');

@@ -1,0 +1,18 @@
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (0, 'UNKNOWN', 0);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (1, 'Foundation Builders', 152);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (2, 'Skyline Constructors', 153);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (3, 'Horizon Crews', 154);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (4, 'Pinnacle Construction Group', 155);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (5, 'Vertex Construction Squad', 156);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (7, 'Summit Constructors', 158);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (8, 'Crest Construction Crew', 159);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (9, 'Capstone Builders', 160);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (10, 'Nexus Building Team', 161);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (11, 'Zenith Constructors', 162);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (12, 'Peak Construction Squad', 163);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (13, 'Crown Construction Crew', 164);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (14, 'Vertex Builders', 165);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (15, 'Apex Construction Group', 166);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (17, 'Sss', 156);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (18, 'New team', 166);
+INSERT INTO y_khudorozhkov.construction_team (id, name, project_id) VALUES (6, 'Apex Building Team', 158);

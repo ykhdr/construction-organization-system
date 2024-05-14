@@ -1,0 +1,15 @@
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (1, 1, 10, 'Highrise Urban Complex', 152, '2023-01-15');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (2, 2, 9, 'Riverside Development', 153, '2023-02-20');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (3, 3, 8, 'Downtown Retail Center', 154, '2023-03-05');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (4, 4, 7, 'Suburban Housing Project', 155, '2023-04-10');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (5, 5, 6, 'Industrial Park Expansion', 156, '2023-05-15');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (6, 6, 5, 'Corporate Headquarters', 157, '2023-06-21');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (7, 7, 4, 'Luxury Condo Towers', 158, '2023-07-30');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (8, 8, 3, 'Mixed-Use Community Space', 159, '2023-08-25');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (9, 9, 2, 'Eco-Friendly Resort', 160, '2023-09-19');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (10, 10, 1, 'Educational Campus', 161, '2023-10-12');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (11, 1, 3, 'Waterfront Entertainment District', 162, '2023-11-09');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (12, 2, 4, 'Innovation Tech Park', 163, '2023-12-05');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (13, 3, 5, 'Urban Renewal Initiative', 164, '2024-01-07');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (14, 4, 6, 'Sports Complex', 165, '2024-02-20');
+INSERT INTO y_khudorozhkov.construction_contract (id, building_organization_id, customer_organization_id, name, project_id, signing_date) VALUES (15, 5, 7, 'Public Transportation Hub', 166, '2024-03-18');

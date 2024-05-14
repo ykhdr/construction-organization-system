@@ -1,0 +1,16 @@
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (0, 'UNKNOWN', 0, 'UNKNOWN');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (152, 'Riverside Apartments', 60, 'APARTMENT_HOUSE');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (153, 'Oakwood Heights', 61, 'APARTMENT_HOUSE');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (154, 'Greenfield Lux Condos', 62, 'APARTMENT_HOUSE');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (155, 'Harbor East Residences', 63, 'APARTMENT_HOUSE');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (156, 'Sunset Boulevard Towers', 64, 'APARTMENT_HOUSE');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (157, 'Maple Grove Academy', 65, 'SCHOOL');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (158, 'Pinecrest Education Center', 66, 'SCHOOL');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (159, 'Silver Lake High School', 67, 'SCHOOL');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (160, 'Cedarwood Primary School', 68, 'SCHOOL');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (161, 'Willow Springs School', 69, 'SCHOOL');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (162, 'Golden Gate Replica', 70, 'BRIDGE');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (163, 'Brooklyn Bridge Mini', 72, 'BRIDGE');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (164, 'River Crossway Span', 73, 'BRIDGE');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (165, 'Downtown Suspension Bridge', 74, 'BRIDGE');
+INSERT INTO y_khudorozhkov.construction_project (id, name, building_site_id, type) VALUES (166, 'Coastal View Link', 75, 'BRIDGE');

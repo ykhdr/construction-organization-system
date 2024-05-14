@@ -1,0 +1,10 @@
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (1, 'Quantum Solutions');
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (2, 'Bright Path Services');
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (3, 'New Age Corp');
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (4, 'Tech Innovations LLC');
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (5, 'Green Earth Ltd.');
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (6, 'NextGen Leaders Inc.');
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (7, 'Dynamic Growth Enterprises');
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (8, 'Visionary Insight Co.');
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (9, 'Future Horizons Inc.');
+INSERT INTO y_khudorozhkov.customer_organization (id, name) VALUES (10, 'Eternal Values Ltd.');

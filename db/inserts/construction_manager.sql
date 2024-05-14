@@ -1,0 +1,15 @@
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (71, 1);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (72, 2);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (73, 3);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (74, 4);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (75, 5);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (76, 6);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (77, 7);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (78, 8);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (79, 9);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (80, 10);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (81, 11);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (82, 12);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (83, 13);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (84, 14);
+INSERT INTO y_khudorozhkov.construction_manager (worker_id, team_id) VALUES (85, 15);
