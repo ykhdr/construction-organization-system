@@ -96,9 +96,10 @@ func (repo *constructionTeamRepository) FindByWorkTypeWithPeriod(ctx context.Con
 			 JOIN work_schedule AS ws ON ct.id = ws.construction_team_id
 		WHERE ($1 = 0 OR ws.work_type_id = $1)
 		  AND ws.work_type_id != 0
-		  AND ($2 = '' OR ws.fact_start_date < to_date($2, 'YYYY-MM-DD'))
-		  AND ($3 = '' OR ws.fact_end_date > to_date($3, 'YYYY-MM-DD'))
-	`, workTypeId, startDate, endDate)
+		  AND ($2 = 0 OR ct.project_id = $2)
+		  AND ($3 = '' OR ws.fact_start_date >= to_date($3, 'YYYY-MM-DD'))
+		  AND ($4 = '' OR ws.fact_end_date <= to_date($4, 'YYYY-MM-DD'))
+	`, workTypeId, 0, startDate, endDate)
 	if err != nil {
 		return nil, err
 	}
