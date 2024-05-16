@@ -10,4 +10,5 @@ type BuildingOrganizationRepository interface {
 	Find(ctx context.Context, id int) (*model.BuildingOrganization, error)
 	Update(ctx context.Context, entity model.BuildingOrganization) error
 	Delete(ctx context.Context, id int) error
+	FindAll(ctx context.Context) ([]*model.BuildingOrganization, error)
 }

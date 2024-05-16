@@ -23,3 +23,21 @@ func (s *BuildingOrganizationService) GetProjects(organizationID int) ([]*model.
 
 	return projects, nil
 }
+
+func (s *BuildingOrganizationService) GetList() ([]*model.BuildingOrganization, error) {
+	organizations, err := s.buildingOrganizationRepository.FindAll(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	return organizations, nil
+}
+
+func (s *BuildingOrganizationService) Get(id int) (*model.BuildingOrganization, error) {
+	organization, err := s.buildingOrganizationRepository.Find(context.Background(), id)
+	if err != nil {
+		return nil, err
+	}
+
+	return organization, nil
+}
