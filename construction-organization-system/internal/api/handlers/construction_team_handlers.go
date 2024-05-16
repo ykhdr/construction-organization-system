@@ -84,9 +84,11 @@ func (h *ConstructionTeamHandlers) Delete(w http.ResponseWriter, r *http.Request
 }
 
 func (h *ConstructionTeamHandlers) GetList(w http.ResponseWriter, r *http.Request) {
+	var projectID int
 	var workTypeID int
 	var err error
 
+	projectIDStr := r.URL.Query().Get("project_id")
 	workType := r.URL.Query().Get("work_type")
 	startDate := r.URL.Query().Get("start_date")
 	endDate := r.URL.Query().Get("end_date")
@@ -111,7 +113,13 @@ func (h *ConstructionTeamHandlers) GetList(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	teams, err := h.constructionTeamService.GetTeams(workTypeID, startDate, endDate)
+	if projectID, err = strconv.Atoi(projectIDStr); err != nil && projectIDStr != "" {
+		log.Logger.WithError(err).Errorln("Error get project id")
+		http.Error(w, "Invalid project id format. Use integer value.", http.StatusBadRequest)
+		return
+	}
+
+	teams, err := h.constructionTeamService.GetTeams(projectID, workTypeID, startDate, endDate)
 	if err != nil {
 		log.Logger.WithError(err).Errorln("Error getting teams")
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -87,7 +87,7 @@ func (repo *constructionTeamRepository) FindByProject(ctx context.Context, proje
 	return teams, nil
 }
 
-func (repo *constructionTeamRepository) FindByWorkTypeWithPeriod(ctx context.Context, workTypeId int, startDate string, endDate string) ([]*model.ConstructionTeam, error) {
+func (repo *constructionTeamRepository) FindByWorkTypeWithPeriod(ctx context.Context, projectId, workTypeId int, startDate string, endDate string) ([]*model.ConstructionTeam, error) {
 	var entities []*model.ConstructionTeam
 
 	rows, err := repo.db.QueryContext(ctx, `
@@ -99,7 +99,7 @@ func (repo *constructionTeamRepository) FindByWorkTypeWithPeriod(ctx context.Con
 		  AND ($2 = 0 OR ct.project_id = $2)
 		  AND ($3 = '' OR ws.fact_start_date >= to_date($3, 'YYYY-MM-DD'))
 		  AND ($4 = '' OR ws.fact_end_date <= to_date($4, 'YYYY-MM-DD'))
-	`, workTypeId, 0, startDate, endDate)
+	`, workTypeId, projectId, startDate, endDate)
 	if err != nil {
 		return nil, err
 	}

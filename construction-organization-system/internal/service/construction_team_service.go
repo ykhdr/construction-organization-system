@@ -36,8 +36,8 @@ func (s *ConstructionTeamService) GetWorkTypes(teamId int, startDate, endDate st
 	return workTypes, nil
 }
 
-func (s *ConstructionTeamService) GetTeams(workTypeId int, startDate string, endDate string) ([]*model.ConstructionTeam, error) {
-	teams, err := s.constructionTeamRepository.FindByWorkTypeWithPeriod(context.Background(), workTypeId, startDate, endDate)
+func (s *ConstructionTeamService) GetTeams(projectId, workTypeId int, startDate string, endDate string) ([]*model.ConstructionTeam, error) {
+	teams, err := s.constructionTeamRepository.FindByWorkTypeWithPeriod(context.Background(), projectId, workTypeId, startDate, endDate)
 	if err != nil {
 		return nil, err
 	}
